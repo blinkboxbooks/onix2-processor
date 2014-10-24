@@ -93,7 +93,7 @@ module Blinkbox
               }
             )
 
-            reader = Reader.new(downloaded_file_io)
+            reader = Reader.new(downloaded_file_io, source)
 
             tic :book
             issues = reader.each_book do |book|
@@ -107,7 +107,7 @@ module Blinkbox
               @logger.info(
                 short_message: "Book collected from ONIX file",
                 event: :book_processed,
-                isbn: isbn,
+                isbn: book['isbn'],
                 message_id: message_id,
                 duration: toc(:book),
                 data: {
@@ -121,7 +121,8 @@ module Blinkbox
             # TODO: toc :file
             :ack
           # TODO: Determine temporary errors
-          rescue
+          rescue => e
+            puts e.backtrace
             # TODO: expand this log message
             @logger.warn(
               stort_message: "Temporary error in processing, requeuing. (#{e.message})",

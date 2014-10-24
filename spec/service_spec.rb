@@ -12,6 +12,7 @@ context Blinkbox::Onix2Processor::Service do
       allow(queue).to receive(:new)
       described_class.new(@options)
       expect(queue).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
+      pending "Mapping definitions"
       expect(queue).to have_received(:new).with("Marvin.onix2_processor.mapping_updates", exchange: "Mapping", bindings: anything)
     end
 
