@@ -9,6 +9,7 @@ gem "blinkbox-common_mapping",   "~> 0.0"
 gem "nokogiri"
 gem "htmlentities"
 gem "sanitize", "~>2.1.0"
+gem "linguistics"
 
 group :development, :test do
   gem "rspec", "~>3.0"

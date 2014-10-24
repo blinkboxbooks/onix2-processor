@@ -40,6 +40,9 @@ GEM
     java_properties (0.0.4)
     json (1.8.1)
     json-schema (2.2.5)
+    linguistics (2.0.3)
+      loggability (~> 0.7)
+    loggability (0.11.0)
     mini_portile (0.6.0)
     minitest (5.4.2)
     multi_json (1.10.1)
@@ -77,6 +80,7 @@ DEPENDENCIES
   blinkbox-common_messaging (~> 0.2)
   cucumber
   htmlentities
+  linguistics
   nokogiri
   rake
   rspec (~> 3.0)

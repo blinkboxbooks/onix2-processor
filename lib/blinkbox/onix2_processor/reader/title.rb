@@ -1,3 +1,4 @@
+require "blinkbox/integerize"
 module Blinkbox::Onix2Processor
   class Title < Processor
     handles_xpath '/onixmessage/product/title'

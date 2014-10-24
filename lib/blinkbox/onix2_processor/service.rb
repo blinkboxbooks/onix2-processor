@@ -66,7 +66,9 @@ module Blinkbox
 
       def start
         accept_types = [ CommonMessaging::IngestionFilePendingV2 ]
-        @queue.subscribe(accept_types, &process_message)
+        @queue.subscribe(accept: accept_types) do |metadata, obj|
+          process_message(metadata, obj)
+        end
       end
 
       def stop
@@ -81,7 +83,7 @@ module Blinkbox
       private
 
       def process_message(metadata, obj)
-        tic :message
+        tic :file
         @mapper.open(obj['source']['uri']) do |downloaded_file_io|
           begin
             source = obj['source'].merge(
@@ -93,27 +95,30 @@ module Blinkbox
 
             reader = Reader.new(downloaded_file_io)
 
-            book = reader.todo_the_stuff
+            tic :book
+            issues = reader.each_book do |book|
+              book_obj = CommonMessaging::IngestionBookMetadataV2.new(book)
 
-            book_obj = CommonMessaging::IngestionBookMetadataV2.new(book)
+              message_id = @exchange.publish(
+                book_obj,
+                message_id_chain: metadata[:headers]['message_id_chain']
+              )
 
-            message_id = @exchange.publish(
-              book_obj,
-              message_id_chain: metadata[:headers]['message_id_chain'],
-              headers: {
-                "isbn" => isbn
-              }
-            )
-            @logger.info(
-              short_message: "TODO: briefly describe what happened",
-              event: :todo_label_the_event,
-              isbn: isbn,
-              message_id: message_id,
-              duration: toc(:message),
-              data: {
-                source: source.dup
-              }
-            )
+              @logger.info(
+                short_message: "Book collected from ONIX file",
+                event: :book_processed,
+                isbn: isbn,
+                message_id: message_id,
+                duration: toc(:book),
+                data: {
+                  source: source.dup
+                }
+              )
+              # Start the timer for the next one
+              tic :book
+            end
+            # TODO: gather issues
+            # TODO: toc :file
             :ack
           # TODO: Determine temporary errors
           rescue
