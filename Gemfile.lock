@@ -16,13 +16,13 @@ GEM
     blinkbox-common_logging (0.5.0)
       gelf
     blinkbox-common_mapping (0.0.2)
-    blinkbox-common_messaging (0.3.0)
+    blinkbox-common_messaging (0.4.0)
       activesupport
       bunny (~> 1.4)
       json-schema
       ruby-units (~> 1.4)
     builder (3.2.2)
-    bunny (1.4.1)
+    bunny (1.5.1)
       amq-protocol (>= 1.9.2)
     cucumber (1.3.17)
       builder (>= 2.1.2)
