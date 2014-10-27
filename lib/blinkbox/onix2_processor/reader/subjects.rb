@@ -6,6 +6,7 @@ module Blinkbox::Onix2Processor
 
     def up(node, state)
       @identifier = {}
+      state['book']['subjects'] ||= []
     end
 
     def process(node, state)
@@ -32,23 +33,18 @@ module Blinkbox::Onix2Processor
           'type' => TYPES[@identifier['subjectschemeidentifier']],
           'code' => @identifier['subjectcode']
         }
-        subject['text'] = @identifier['subjectheadingtext'] if @identifier['subjectheadingtext']
-
         subject['main'] = true if @identifier['main']
 
-        if @identifier['subjectschemeidentifier'] == "20" and (subject['text'] || '').split(/[;,\|]\s*/).length > 3
-          # hack for publishers who send long strings as delimited by semicolons, commas etc, as keywords rather than as different items
-
-          new_keywords = subject['text'].split(/[;,\|]\s*/)
-
-          new_keywords.each do |keyword|
+        if @identifier['subjectschemeidentifier'] == "20"
+          # Hack for publishers who send long strings as delimited by semicolons, commas etc, as keywords rather than as different items  
+          keywords = (@identifier['subjectheadingtext'] || '').split(/[;,\|]\s*/)
+          keywords.each do |keyword|
             new_subject = subject.dup
             new_subject['code'] = keyword
-            (state['book']['subjects'] ||= []).push(new_subject)
+            state['book']['subjects'].push(new_subject)
           end
-
         else
-          (state['book']['subjects'] ||= []).push(subject)
+          state['book']['subjects'].push(subject)
         end
       end
     end
