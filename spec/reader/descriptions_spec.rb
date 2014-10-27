@@ -129,5 +129,35 @@ RSpec.shared_examples descriptor do
       desc = book['descriptions'].first
       expect(desc['content']).to eq("<p>Howdy</p>")
     end
+
+    it "must leave acceptable HTML in descriptions" do
+      [
+        "<em>Emph</em>",
+        "<ol></ol>",
+        "<ul></ul>",
+        "<li>work?</li>",
+        "<strong>Strong</strong>",
+        "<i>italic</i>",
+        "<b>bold</b>",
+        "<br />",
+        "<a href=\"http://google.com\">google</a>",
+        "<a href=\"http://path.to/place\" title=\"Title\">link</a>"
+      ].each do |tag|
+        data = "Acceptable tag #{tag} is kept"
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <OtherText>
+              <TextTypeCode>18</TextTypeCode>
+              <TextFormat>05</TextFormat>
+              <Text><![CDATA[#{data}]]></Text>
+            </OtherText>
+          </Product>
+        </ONIXmessage>
+        XML
+        desc = book["descriptions"].first
+        expect(desc["content"]).to eq(data)
+      end
+    end
   end
 end
