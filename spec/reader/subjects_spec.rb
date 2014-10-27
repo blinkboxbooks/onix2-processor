@@ -77,6 +77,24 @@ RSpec.shared_examples descriptor do
       expect(subj['code']).to eq("FYB")
     end
 
+    it "must extract keywords with HTML encoded characters" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <product>
+          <mainsubject>
+            <b191>20</b191>
+            <b070>Country Life &amp; Pets</b070>
+          </mainsubject>
+        </product>
+      </ONIXmessage>
+      XML
+
+      expect(book['subjects'].size).to eq(1)
+      subj = book['subjects'].first
+      expect(subj['type']).to eq("Keyword")
+      expect(subj['code']).to eq("Country Life & Pets")
+    end
+
     [",", ";", ", ", "; "].each do |delim|
       it "must extract keywords delimited by #{delim.inspect}" do
         words = ["Antony Beevor", "The Second World War", "Berlin", "D-Day"]
