@@ -4,14 +4,20 @@ RSpec.shared_examples descriptor do
   describe "while reading #{descriptor}" do
     describe "AvailabilityCode" do
       {
-        'AB' => false,
-        'AD' => false,
-        'CS' => false,
-        'EX' => false,
         'IP' => true,
         'MD' => true,
         'NP' => true,
         'NY' => true,
+        'RP' => true,
+        'RU' => true,
+        'TO' => true,
+        'TP' => true,
+        'TU' => true,
+        'WR' => true,
+        'AB' => false,
+        'AD' => false,
+        'CS' => false,
+        'EX' => false,
         'OF' => false,
         'OI' => false,
         'OP' => false,
@@ -19,13 +25,7 @@ RSpec.shared_examples descriptor do
         'PP' => false,
         'RF' => false,
         'RM' => false,
-        'RP' => true,
-        'RU' => true,
-        'TO' => true,
-        'TP' => true,
-        'TU' => true,
         'UR' => false,
-        'WR' => true,
         'WS' => false
       }.each_pair do |code, availability|
         it "must be marked as #{availability ? '' : 'un'}available for #{code}" do
@@ -52,12 +52,12 @@ RSpec.shared_examples descriptor do
         '02' => true,
         '03' => true,
         '04' => true,
-        '05' => false,
         '08' => true,
         '09' => true,
         '12' => true,
         '13' => true,
-        '14' => true
+        '14' => true,
+        '05' => false
       }.each_pair do |code, availability|
         it "must be marked as #{availability ? '' : 'un'}available for #{code}" do
           book = process_xml_with_service <<-XML
@@ -78,15 +78,15 @@ RSpec.shared_examples descriptor do
     describe "PublishingStatus" do
       {
         '00' => true,
-        '01' => false,
         '02' => true,
-        '03' => false,
         '04' => true,
+        '09' => true,
+        '01' => false,
+        '03' => false,
         '05' => false,
         '06' => false,
         '07' => false,
         '08' => false,
-        '09' => true,
         '10' => false,
         '11' => false,
         '12' => false,
@@ -113,19 +113,20 @@ RSpec.shared_examples descriptor do
 
     describe "ProductAvailability" do
       {
-        '01' => false,
         '10' => true,
         '11' => true,
-        '12' => false,
         '20' => true,
         '21' => true,
         '22' => true,
+        '33' => true,
+        '34' => true,
+        '97' => true,
+        '01' => false,
+        '12' => false,
         '23' => false,
         '30' => false,
         '31' => false,
         '32' => false,
-        '33' => true,
-        '34' => true,
         '40' => false,
         '41' => false,
         '42' => false,
@@ -139,7 +140,6 @@ RSpec.shared_examples descriptor do
         '50' => false,
         '51' => false,
         '52' => false,
-        '97' => true ,
         '98' => false,
         '99' => false
       }.each_pair do |code, availability|
