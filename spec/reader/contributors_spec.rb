@@ -1,4 +1,4 @@
-descriptor = "contributors"
+descriptor = ReaderExamples.add "contributors"
 
 RSpec.shared_examples descriptor do
   describe "while reading #{descriptor}" do

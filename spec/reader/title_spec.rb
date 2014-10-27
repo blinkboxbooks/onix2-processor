@@ -1,4 +1,4 @@
-descriptor = "titles"
+descriptor = ReaderExamples.add "titles"
 
 RSpec.shared_examples descriptor do
   describe "while reading #{descriptor}" do
