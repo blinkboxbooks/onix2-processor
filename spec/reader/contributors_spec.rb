@@ -184,5 +184,47 @@ RSpec.shared_examples descriptor do
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography")
     end
+
+    it "must sanitize HTML in biographies" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <BiographicalNote><![CDATA[I'm a baddie <script>alert("Malicious!");</script>haha!]]></BiographicalNote>
+          </Contributor>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect(book["contributors"].size).to eq(1)
+      expect(book["contributors"].first["biography"]).to eq("I'm a baddie haha!")
+    end
+
+    it "must leave acceptable HTML in biographies" do
+      [
+        "<em>Emph</em>",
+        "<ol></ol>",
+        "<ul></ul>",
+        "<li>work?</li>",
+        "<strong>Strong</strong>",
+        "<i>italic</i>",
+        "<b>bold</b>",
+        "<br />",
+        "<a href=\"http://google.com\">google</a>",
+        "<a href=\"http://path.to/place\" title=\"Title\">link</a>"
+      ].each do |tag|
+        data = "Acceptable tag #{tag} is kept"
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <Contributor>
+              <BiographicalNote><![CDATA[#{data}]]></BiographicalNote>
+            </Contributor>
+          </Product>
+        </ONIXmessage>
+        XML
+        expect(book["contributors"].size).to eq(1)
+        expect(book["contributors"].first["biography"]).to eq(data)
+      end
+    end
   end
 end
