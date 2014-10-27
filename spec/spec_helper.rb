@@ -19,6 +19,12 @@ module Helpers
   end
 end
 
+class ReaderExamples
+  @@examples = []
+  def self.add(name); @@examples.push(name); name; end
+  def self.list; @@examples; end
+end
+
 RSpec.configure do |config|
   config.before :all do
     schema_root = File.join(__dir__, "../schemas")
