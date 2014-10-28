@@ -21,7 +21,7 @@ module Blinkbox::Onix2Processor
           },
           {
             "realm" => "source_username",
-            "id" => state[:source]["username"]
+            "id" => state[:source]["username"] || ""
           }
         ],
         'source' => state[:source]

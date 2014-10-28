@@ -15,7 +15,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect((book['descriptions'] || []).size).to eq(0)
       expect(book['reviews'].size).to eq(1)
       rev = book['reviews'].first
@@ -49,6 +49,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
+        expect_schema_compliance(book)
         rev = book["reviews"].first
         expect(rev["content"]).to eq(data)
       end

@@ -12,6 +12,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["subtitle"]).to eq("Inside title")
     end
 
@@ -23,6 +24,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["subtitle"]).to eq("Outside title")
     end
 
@@ -34,6 +36,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["subtitle"]).to eq("shrt ttle")
     end
 
@@ -47,6 +50,7 @@ RSpec.shared_examples descriptor do
         </product>
       </onixmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["subtitle"]).to eq("Jefferson, Adams, Marshall, and the Battle for the Supreme Court")
     end
   end

@@ -38,6 +38,7 @@ RSpec.shared_examples descriptor do
             </Product>
           </ONIXmessage>
           XML
+          expect_schema_compliance(book)
           expect(book["availability"]).to_not be_nil
           expect(book["availability"]["availabilityCode"]).to_not be_nil
           expect(book["availability"]["availabilityCode"]["available"]).to eq(availability)
@@ -67,6 +68,7 @@ RSpec.shared_examples descriptor do
             </Product>
           </ONIXmessage>
           XML
+          expect_schema_compliance(book)
           expect(book["availability"]).to_not be_nil
           expect(book["availability"]["notificationType"]).to_not be_nil
           expect(book["availability"]["notificationType"]["available"]).to eq(availability)
@@ -101,6 +103,7 @@ RSpec.shared_examples descriptor do
             </Product>
           </ONIXmessage>
           XML
+          expect_schema_compliance(book)
           expect(book["availability"]).to_not be_nil
           expect(book["availability"]["publishingStatus"]).to_not be_nil
           expect(book["availability"]["publishingStatus"]["available"]).to eq(availability)
@@ -153,6 +156,7 @@ RSpec.shared_examples descriptor do
             </Product>
           </ONIXmessage>
           XML
+          expect_schema_compliance(book)
           expect(book["availability"]).to_not be_nil
           expect(book["availability"]["productAvailability"]).to_not be_nil
           expect(book["availability"]["productAvailability"]["available"]).to eq(availability)

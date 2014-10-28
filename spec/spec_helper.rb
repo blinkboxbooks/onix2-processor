@@ -10,12 +10,24 @@ module Helpers
   end
 
   def process_xml_with_service(xml)
-    reader = Blinkbox::Onix2Processor::Reader.new(xml, {})
+    reader = Blinkbox::Onix2Processor::Reader.new(xml, {
+      "deliveredAt" => Time.now.utc.iso8601,
+      "role" => "publisher_ftp",
+      "username" => "whomsoever"
+    })
     book = nil
     reader.each_book do |output|
       book = output
     end
     book
+  end
+
+  def expect_schema_compliance(doc)
+    expect(doc['$schema']).to_not be_nil
+    expect {
+      klass = Blinkbox::CommonMessaging.class_from_content_type("application/vnd.blinkbox.books.#{doc['$schema']}+json")
+      klass.new(doc)
+    }.to_not raise_error
   end
 end
 

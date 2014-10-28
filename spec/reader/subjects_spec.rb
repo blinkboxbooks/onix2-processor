@@ -10,7 +10,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['subjects'].size).to eq(1)
       subj = book['subjects'].first
       expect(subj['type']).to eq("BISAC")
@@ -30,7 +30,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['subjects'].size).to eq(1)
       subj = book['subjects'].first
       expect(subj['type']).to eq("BISAC")
@@ -49,7 +49,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['subjects'].size).to eq(1)
       subj = book['subjects'].first
       expect(subj['type']).to eq("BIC")
@@ -70,7 +70,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['subjects'].size).to eq(1)
       subj = book['subjects'].first
       expect(subj['type']).to eq("BIC")
@@ -88,7 +88,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['subjects'].size).to eq(1)
       subj = book['subjects'].first
       expect(subj['type']).to eq("Keyword")
@@ -108,7 +108,7 @@ RSpec.shared_examples descriptor do
           </product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['subjects'].size).to eq(words.size)
         book['subjects'].each do |subj|
           expect(subj['type']).to eq("Keyword")

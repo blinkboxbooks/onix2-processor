@@ -8,10 +8,12 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <PersonName>Valentine Cunningham</PersonName>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Valentine Cunningham")
     end
@@ -22,10 +24,12 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <PersonName> Valentine Cunningham </PersonName>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Valentine Cunningham")
     end
@@ -36,10 +40,12 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <PersonNameInverted>Cunningham, Valentine</PersonNameInverted>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["sort"]).to eq("Cunningham, Valentine")
     end
@@ -54,6 +60,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["role"]).to eq("A01")
     end
@@ -66,6 +73,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(0)
     end
 
@@ -75,10 +83,12 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <CorporateName>Top Gear</CorporateName>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Top Gear")
     end
@@ -96,10 +106,12 @@ RSpec.shared_examples descriptor do
             <SuffixToKey>SuffixToKey</SuffixToKey>
             <LettersAfterNames>LettersAfterNames</LettersAfterNames>
             <TitlesAfterNames>TitlesAfterNames</TitlesAfterNames>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["titlesBeforeNames"]).to eq("TitlesBeforeNames")
       expect(book["contributors"].first["names"]["namesBeforeKey"]).to eq("NamesBeforeKey")
@@ -119,10 +131,12 @@ RSpec.shared_examples descriptor do
           <Contributor>
             <NamesBeforeKey>Charles and Mary</NamesBeforeKey>
             <KeyNames>Lamb</KeyNames>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Charles and Mary Lamb")
       expect(book["contributors"].first["names"]["sort"]).to eq("Lamb, Charles and Mary")
@@ -139,10 +153,12 @@ RSpec.shared_examples descriptor do
             <PersonNameInverted>Cunningham, Valentine</PersonNameInverted>
             <NamesBeforeKey>Charles and Mary</NamesBeforeKey>
             <KeyNames>Lamb</KeyNames>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Valentine Cunningham")
       expect(book["contributors"].first["names"]["sort"]).to eq("Cunningham, Valentine")
@@ -160,10 +176,12 @@ RSpec.shared_examples descriptor do
             <b037><![CDATA[Sloan, Cliff 'I have a weird sort name']]></b037>
             <b039><![CDATA[Cliff]]></b039>
             <b040><![CDATA[Sloan]]></b040>
+            <ContributorRole>A01</ContributorRole>
           </contributor>
         </product>
       </onixmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Cliff Sloan")
       expect(book["contributors"].first["names"]["sort"]).to eq("Sloan, Cliff 'I have a weird sort name'")
@@ -177,10 +195,12 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <BiographicalNote>A biography</BiographicalNote>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography")
     end
@@ -191,6 +211,7 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <PersonName>Joe Bloggs</PersonName>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
           <OtherText>
             <TextTypeCode>13</TextTypeCode>
@@ -200,6 +221,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography")
       expect(book["descriptions"].size).to eq(0)
@@ -211,6 +233,7 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <BiographicalNote>A biography from contributor</BiographicalNote>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
           <OtherText>
             <TextTypeCode>13</TextTypeCode>
@@ -220,6 +243,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography from contributor")
       expect(book["descriptions"].size).to eq(1)
@@ -231,9 +255,11 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <PersonName>Joe Bloggs</PersonName>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
           <Contributor>
             <PersonName>Bob Bloggs</PersonName>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
           <OtherText>
             <TextTypeCode>13</TextTypeCode>
@@ -243,6 +269,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(2)
       expect(book["contributors"].first["biography"]).to be_nil
       expect(book["contributors"].last["biography"]).to be_nil
@@ -255,10 +282,12 @@ RSpec.shared_examples descriptor do
         <Product>
           <Contributor>
             <BiographicalNote><![CDATA[I'm a baddie <script>alert("Malicious!");</script>haha!]]></BiographicalNote>
+            <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("I'm a baddie haha!")
     end
@@ -282,10 +311,12 @@ RSpec.shared_examples descriptor do
           <Product>
             <Contributor>
               <BiographicalNote><![CDATA[#{data}]]></BiographicalNote>
+              <ContributorRole>A01</ContributorRole>
             </Contributor>
           </Product>
         </ONIXmessage>
         XML
+        expect_schema_compliance(book)
         expect(book["contributors"].size).to eq(1)
         expect(book["contributors"].first["biography"]).to eq(data)
       end

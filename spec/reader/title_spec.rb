@@ -12,6 +12,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("Inside title")
     end
 
@@ -23,6 +24,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("Outside title")
     end
 
@@ -36,6 +38,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("Titlè wïth áccents")
     end
 
@@ -50,6 +53,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("The Split Title")
     end
     
@@ -63,6 +67,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("inside title")
     end
 
@@ -76,6 +81,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("distinctive title")
     end
 
@@ -89,6 +95,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
+      expect_schema_compliance(book)
       expect(book["title"]).to eq("The Great Decision")
     end
   end

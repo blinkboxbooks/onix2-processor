@@ -13,7 +13,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['series']['title']).to eq("Battersea Dogs & Cats Home")
       expect(book['series']['number']).to eq(5)
     end
@@ -36,7 +36,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['title']).to eq("Book name")
         expect(book['series']['title']).to eq("Series name")
         expect(book['series']['number']).to eq(2)

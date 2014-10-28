@@ -14,7 +14,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['type']).to eq("18")
@@ -33,7 +33,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['type']).to eq("18")
@@ -52,7 +52,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['type']).to eq("18")
@@ -71,7 +71,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['content']).to eq("This is <strong>html</strong> dammit!")
@@ -89,7 +89,7 @@ RSpec.shared_examples descriptor do
         </Product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['content']).to eq("This is <strong>html</strong> dammit!")
@@ -107,7 +107,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['content']).to eq("This really isn't SGML")
@@ -124,7 +124,7 @@ RSpec.shared_examples descriptor do
         </product>
       </ONIXmessage>
       XML
-
+      expect_schema_compliance(book)
       expect(book['descriptions'].size).to eq(1)
       desc = book['descriptions'].first
       expect(desc['content']).to eq("<p>Howdy</p>")
@@ -155,6 +155,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
+        expect_schema_compliance(book)
         desc = book["descriptions"].first
         expect(desc["content"]).to eq(data)
       end

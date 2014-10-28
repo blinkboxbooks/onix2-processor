@@ -21,15 +21,18 @@ module Blinkbox::Onix2Processor
 
       if !type.nil?
         text = {
+          'classification' => [
+            {
+              'realm' => "onix-codelist-33",
+              'id' => @identifier['texttypecode']
+            }
+          ],
           'type' => @identifier['texttypecode'],
           'content' => @identifier['text']
         }
 
         text['author'] = @identifier['textauthor'] if @identifier['textauthor']
-
-        if text['content'] =~ /&(?:#?\d{2,3}|[a-z]+);/
-          text['content'] = HTMLEntities.new.decode(text['content'])
-        end
+        text['content'] = HTMLEntities.new.decode(text['content']) if text['content'] =~ /&(?:#?\d{2,3}|[a-z]+);/
         # Santize (HTML) output
         text['content'] = sanitize_html(text['content'])
         (state['book'][type] ||= []).push(text)

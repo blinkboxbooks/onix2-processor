@@ -11,7 +11,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['languages'].size).to eq(1)
         expect(book['languages'].first).to eq(lang.downcase)
       end
@@ -26,7 +26,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['originalLanguages'].size).to eq(1)
         expect(book['originalLanguages'].first).to eq(lang.downcase)
       end
@@ -44,7 +44,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['languages'].size).to eq(1)
         expect(book['languages'].first).to eq(lang.downcase)
       end
@@ -62,7 +62,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['languages'].size).to eq(1)
         expect(book['languages'].first).to eq(lang.downcase)
       end
@@ -80,7 +80,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['originalLanguages'].size).to eq(1)
         expect(book['originalLanguages'].first).to eq(lang.downcase)
       end
@@ -98,7 +98,7 @@ RSpec.shared_examples descriptor do
           </Product>
         </ONIXmessage>
         XML
-
+        expect_schema_compliance(book)
         expect(book['originalLanguages'].size).to eq(1)
         expect(book['originalLanguages'].first).to eq(lang.downcase)
       end
