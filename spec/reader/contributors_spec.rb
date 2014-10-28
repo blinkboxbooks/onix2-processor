@@ -171,7 +171,7 @@ RSpec.shared_examples descriptor do
       expect(book["contributors"].first["names"]["keyNames"]).to eq("Sloan")
     end
 
-    it "must extract biographies" do
+    it "must extract biographies from contributor details" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>
         <Product>
@@ -183,6 +183,70 @@ RSpec.shared_examples descriptor do
       XML
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography")
+    end
+
+    it "must extract biographies from othertext details" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <PersonName>Joe Bloggs</PersonName>
+          </Contributor>
+          <OtherText>
+            <TextTypeCode>13</TextTypeCode>
+            <TextFormat>05</TextFormat>
+            <Text><![CDATA[A biography]]></Text>
+          </OtherText>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect(book["contributors"].size).to eq(1)
+      expect(book["contributors"].first["biography"]).to eq("A biography")
+      expect(book["descriptions"].size).to eq(0)
+    end
+
+    it "must not replace contributor biography details with othertext biography details" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <BiographicalNote>A biography from contributor</BiographicalNote>
+          </Contributor>
+          <OtherText>
+            <TextTypeCode>13</TextTypeCode>
+            <TextFormat>05</TextFormat>
+            <Text><![CDATA[A biography from othertext]]></Text>
+          </OtherText>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect(book["contributors"].size).to eq(1)
+      expect(book["contributors"].first["biography"]).to eq("A biography from contributor")
+      expect(book["descriptions"].size).to eq(1)
+    end
+
+    it "must not extract biographies from othertext details for books with more than one contributor" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <PersonName>Joe Bloggs</PersonName>
+          </Contributor>
+          <Contributor>
+            <PersonName>Bob Bloggs</PersonName>
+          </Contributor>
+          <OtherText>
+            <TextTypeCode>13</TextTypeCode>
+            <TextFormat>05</TextFormat>
+            <Text><![CDATA[A biography for both authors]]></Text>
+          </OtherText>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect(book["contributors"].size).to eq(2)
+      expect(book["contributors"].first["biography"]).to be_nil
+      expect(book["contributors"].last["biography"]).to be_nil
+      expect(book["descriptions"].size).to eq(1)
     end
 
     it "must sanitize HTML in biographies" do
