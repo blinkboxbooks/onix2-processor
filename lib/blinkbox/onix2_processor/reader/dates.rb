@@ -17,7 +17,7 @@ module Blinkbox::Onix2Processor
     end
 
     def self.process_date(string)
-      if string =~ /^(\d{4})(\d{2})?(\d{2})?$/
+      if string =~ /^(\d{4})-?(\d{2})?-?(\d{2})?$/
         return Date.new($1.to_i,($2 || 1).to_i,($3 || 1).to_i).iso8601
       else
         raise "Invalid date given: #{string}"
