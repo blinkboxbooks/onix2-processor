@@ -96,7 +96,7 @@ module Blinkbox
               }
             )
 
-            reader = Reader.new(downloaded_file_io, source, @logger)
+            reader = Reader.new(downloaded_file_io, source)
 
             tic :book
             issues = reader.each_book do |book|
