@@ -16,7 +16,8 @@ module Blinkbox::Onix2Processor
       state['book']['series'] = {}
 
       state['book']['series']['title'] = @identifier['titleofseries']
-      state['book']['series']['number'] = @identifier['numberwithinseries'].to_i unless @identifier['numberwithinseries'].empty?
+      number = @identifier['numberwithinseries']
+      state['book']['series']['number'] = @identifier['numberwithinseries'].to_i unless number.nil? || number.empty?
     end
   end
 end
