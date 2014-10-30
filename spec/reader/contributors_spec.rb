@@ -321,5 +321,21 @@ RSpec.shared_examples descriptor do
         expect(book["contributors"].first["biography"]).to eq(data)
       end
     end
+
+    it "must extract remote contributor images" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <PersonName>Valentine Cunningham</PersonName>
+            <ContributorRole>A01</ContributorRole>
+          </Contributor>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book["contributors"].size).to eq(1)
+      expect(book["contributors"].first["names"]["display"]).to eq("Valentine Cunningham")
+    end
   end
 end

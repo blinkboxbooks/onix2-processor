@@ -1,0 +1,63 @@
+"03":
+  location: images
+  type: whole_cover
+"04":
+  location: images
+  type: front_cover
+"05":
+  location: images
+  type: whole_cover
+"06":
+  location: images
+  type: front_cover
+"08":
+  location: images
+  type: contributors
+"24":
+  location: images
+  type: back_cover
+"25":
+  location: images
+  type: back_cover
+"29":
+  location: videos
+  type: general
+"30":
+  location: audio
+  type: general
+"31":
+  location: videos
+  type: author_commentary
+"32":
+  location: videos
+  type: author_interview
+"33":
+  location: videos
+  type: author_reading
+"36":
+  location: videos
+  type: promotional
+"37":
+  location: videos
+  type: review
+"38":
+  location: videos
+  type: discussion
+"41":
+  location: audio
+  type: author_commentary
+"42":
+  location: audio
+  type: author_interview
+"43":
+  location: audio
+  type: author_reading
+"45":
+  location: audio
+  type: promotional
+"46":
+  location: audio
+  type: review
+"47":
+  location: audio
+  type: discussion

@@ -29,10 +29,27 @@ module Blinkbox::Onix2Processor
 
       # Pull biographical notes on books with sole contributors into the contributor
       if book['contributors'].size == 1
-        biog = book['descriptions'].select { |d| d['type'] == "13" }.first
-        if !biog.nil? && book['contributors'].first['biography'].nil?
-          book['contributors'].first['biography'] = biog['content']
+        contributor = book['contributors'].first
+
+        biog = (book['descriptions'] || []).select { |d|
+          d['type'] == "13"
+        }.first
+        if !biog.nil? && contributor['biography'].nil?
+          contributor['biography'] = biog['content']
           book['descriptions'].delete(biog)
+        end
+
+        images = book['media']['images'] || [] rescue []
+        contributor_profile = images.select { |i|
+          i['classification'] == [{"realm"=>"type", "id"=>"contributors"}]
+        }.first
+        if !contributor_profile.nil?
+          contributor['media'] ||= {}
+          contributor['media']['images'] ||= []
+          media = contributor_profile.dup
+          # The type classification is "profile" when in a contributor, and "contributors" when in book.
+          media['classification'].first['id'] = "profile"
+          contributor['media']['images'].push(media)
         end
       end
 
