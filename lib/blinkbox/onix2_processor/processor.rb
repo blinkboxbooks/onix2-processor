@@ -59,7 +59,7 @@ class Blinkbox::Onix2Processor::Processor
               error_class: e.class,
               error_message: e.message,
               position: position.join('/'),
-              backtrace: e.backtrace
+              backtrace: e.backtrace.join("\n")
             }
           )
         end
