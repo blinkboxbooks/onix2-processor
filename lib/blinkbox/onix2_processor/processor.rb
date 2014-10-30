@@ -41,7 +41,6 @@ class Blinkbox::Onix2Processor::Processor
         @klasses[position] ||= processor.new
 
         begin
-          node_value = node.value
           # Is this node the declared node and opening?
           if root_node and node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
             @klasses[position].up(node, state)
@@ -62,7 +61,7 @@ class Blinkbox::Onix2Processor::Processor
               error_message: e.message,
               position: position.join('/'),
               backtrace: e.backtrace.join("\n"),
-              node_value: node_value
+              node_value: node.value
             }
           )
         end

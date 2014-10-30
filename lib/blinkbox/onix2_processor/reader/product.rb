@@ -54,7 +54,7 @@ module Blinkbox::Onix2Processor
         end
       end
 
-      state[:product_failures].map! { |f| f[:isbn] = book['isbn'] } if book['isbn']
+      state[:product_failures].each { |f| f[:isbn] = book['isbn'] } if book['isbn']
       state[:failures].push(*state[:product_failures])
       state[:on_book_metadata_complete].call(book)
 
