@@ -43,5 +43,32 @@ RSpec.shared_examples descriptor do
       expect_schema_compliance(book)
       expect(book['isbn']).to eq("9780111222333")
     end
+
+    %w{13}.each do |relation_code|
+      %w{15 03}.each do |product_id_type|
+        it "must extract related ISBNs" do
+          isbn = "9780091856090"
+          book = process_xml_with_service <<-XML
+          <ONIXmessage>
+            <Product>
+              <RelatedProduct>
+                <RelationCode>#{relation_code}</RelationCode>
+                <ProductIdentifier>
+                  <ProductIDType>#{product_id_type}</ProductIDType>
+                  <IDValue>#{isbn}</IDValue>
+                </ProductIdentifier>
+              </RelatedProduct>
+            </Product>
+          </ONIXmessage>
+          XML
+          expect_schema_compliance(book)
+          expect(book['related'].size).to eq(1)
+          related = book['related'].first
+          expect(related['classification']).to eq([{ "realm" => "isbn", "id" => isbn }])
+          expect(related['relation']).to eq(relation_code)
+          expect(related['isbn']).to eq(isbn)
+        end
+      end
+    end
   end
 end
