@@ -7,6 +7,7 @@ module Blinkbox::Onix2Processor
         'contributors' => [],
         'descriptions' => []
       }
+      state[:product_failures] = []
     end
 
     def process(node, state); end
@@ -53,6 +54,8 @@ module Blinkbox::Onix2Processor
         end
       end
 
+      state[:product_failures].map! { |f| f[:isbn] = book['isbn'] } if book['isbn']
+      state[:failures].push(*state[:product_failures])
       state[:on_book_metadata_complete].call(book)
 
       state['book'] = {}

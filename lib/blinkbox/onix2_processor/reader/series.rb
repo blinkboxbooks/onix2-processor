@@ -16,9 +16,18 @@ module Blinkbox::Onix2Processor
       state['book']['series'] = {}
 
       title = @identifier['titleofseries']
-      state['book']['series']['title'] = title unless title.nil? || title.empty?
-      number = @identifier['numberwithinseries'].to_i
-      state['book']['series']['number'] = number unless number == 0
+      if !title.nil? && !title.empty?
+        state['book']['series']['title'] = title
+        number = @identifier['numberwithinseries'].to_i
+        state['book']['series']['number'] = number unless number == 0
+      else
+        state[:product_failures].push(
+          error_code: "SeriesTitleMissing",
+          data: {
+            identifiers: @identifier
+          }
+        )
+      end
     end
   end
 end

@@ -108,7 +108,7 @@ module Blinkbox
               )
 
               @logger.info(
-                short_message: "Book collected from ONIX file",
+                short_message: "Book #{book['isbn']} collected from ONIX file",
                 event: :book_processed,
                 isbn: book['isbn'],
                 message_id: message_id,
@@ -120,8 +120,30 @@ module Blinkbox
               # Start the timer for the next one
               tic :book
             end
-            # TODO: gather issues
-            # TODO: toc :file
+
+            if issues.any?
+              rej_obj = CommonMessaging::IngestionFileRejectedV2.new(
+                rejectionReasons: issues,
+                source: source
+              )
+
+              message_id = @exchange.publish(rej_obj, message_id_chain: metadata[:headers]['message_id_chain'] || [])
+              # TODO: Proper error message
+              @logger.info(
+                short_message: "Issues were found with formatting of an ONIX file",
+                event: :onix_invalid,
+                message_id: message_id,
+                data: {
+                  source: source.dup,
+                  issues: issues
+                }
+              )
+            end
+            @logger.debug(
+              short_message: "ONIX file processing finished",
+              event: :onix_finished,
+              duration: toc(:file)
+            )
             :ack
           # TODO: Determine temporary errors
           rescue => e
