@@ -15,9 +15,10 @@ module Blinkbox::Onix2Processor
     def down(node, state)
       state['book']['series'] = {}
 
-      state['book']['series']['title'] = @identifier['titleofseries']
-      number = @identifier['numberwithinseries']
-      state['book']['series']['number'] = @identifier['numberwithinseries'].to_i unless number.nil? || number.empty?
+      title = @identifier['titleofseries']
+      state['book']['series']['title'] = title unless title.nil? || title.empty?
+      number = @identifier['numberwithinseries'].to_i
+      state['book']['series']['number'] = number unless number == 0
     end
   end
 end
