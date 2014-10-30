@@ -4,6 +4,13 @@ class Blinkbox::Onix2Processor::Processor
   @@registered_processors = {}
   @@valid_html = YAML.load(open(File.join(__dir__, "../../../config/valid_html.yaml")))
 
+  # Instantiate a blackhole logger by default
+  @@logger = Class.new { def method_missing(*args); end }
+
+  def self.logger=(logger)
+    @@logger = logger
+  end
+
   # Allow classes inheriting from this one to declare which nodes they can process
   def self.handles_xpath(xpath, klass = self)
     position_as_array = xpath.split('/').reject(&:empty?)
@@ -33,16 +40,28 @@ class Blinkbox::Onix2Processor::Processor
       unless processor.nil?
         @klasses[position] ||= processor.new
 
-        # Is this node the declared node and opening?
-        if root_node and node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
-          @klasses[position].up(node, state)
-        end
+        begin
+          # Is this node the declared node and opening?
+          if root_node and node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
+            @klasses[position].up(node, state)
+          end
 
-        @klasses[position].process(node, state)
+          @klasses[position].process(node, state)
 
-        # Is this node the declared node and closing?
-        if root_node and (node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT or node.self_closing?)
-          @klasses[position].down(node, state)
+          # Is this node the declared node and closing?
+          if root_node and (node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT or node.self_closing?)
+            @klasses[position].down(node, state)
+          end
+        rescue => e
+          @@logger.error(
+            short_message: "Processing of node failed",
+            details: {
+              error_class: e.class,
+              error_message: e.message,
+              position: position.join('/'),
+              backtrace: e.backtrace
+            }
+          )
         end
       end
     end

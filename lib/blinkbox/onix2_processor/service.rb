@@ -19,6 +19,9 @@ module Blinkbox
         @logger.facility_version = VERSION
         raise "logging.gelf.facility is not #{SERVICE_NAME}." unless SERVICE_NAME == options[:'logging.gelf.facility']
 
+        # Set the logger for the processor too
+        Processor.logger = @logger
+
         rabbit_opts = options.tree(:rabbitmq).to_hash
         prefetch = rabbit_opts.delete(:prefetch)
         CommonMessaging.configure!(rabbit_opts, @logger)
@@ -93,7 +96,7 @@ module Blinkbox
               }
             )
 
-            reader = Reader.new(downloaded_file_io, source)
+            reader = Reader.new(downloaded_file_io, source, @logger)
 
             tic :book
             issues = reader.each_book do |book|
