@@ -27,6 +27,17 @@ module Blinkbox::Onix2Processor
         'source' => state[:source]
       )
 
+      # Contributor sequence numbers
+      if book['contributors'].size != 0
+        n = 1
+        seqs = book['contributors'].map do |c|
+          c['seq'] ||= n
+          n = [n, c['seq']].max + 1
+          c['seq']
+        end
+        product_failure(state, "IncorrectContributorSequenceNumbers", sequence_numbers: seqs) if seqs != (1..seqs.size).to_a
+      end
+
       # Pull biographical notes on books with sole contributors into the contributor
       if book['contributors'].size == 1
         contributor = book['contributors'].first

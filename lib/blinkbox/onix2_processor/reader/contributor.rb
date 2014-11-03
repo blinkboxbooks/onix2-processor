@@ -45,6 +45,8 @@ module Blinkbox::Onix2Processor
       end
 
       return product_failure(state, "MissingContributorName") if c['names']['display'].nil? || c['names']['display'].empty?
+
+      c['seq'] = @identifier['sequencenumber'].to_i if !@identifier['sequencenumber'].nil? && @identifier['sequencenumber'].match(/^\d+$/)
       c['biography'] = sanitize_html(@identifier['biographicalnote']) if @identifier['biographicalnote']
       state['book']['contributors'].push(c)
     end
