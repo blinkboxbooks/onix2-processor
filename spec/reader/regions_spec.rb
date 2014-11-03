@@ -89,5 +89,56 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['salesRights']['WORLD']).to eq(true)
     end
     
+    it "must raise failure for invalid supply regions" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <SupplyToCountry>WAT</SupplyToCountry>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidSupplyRightsRegion")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:region]).to eq("WAT")
+    end
+
+    it "must raise failure for invalid supply regions" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <SupplyToCountryExcluded>WAT</SupplyToCountryExcluded>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidSupplyRightsRegion")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:region]).to eq("WAT")
+    end
+
+    it "must raise failure for invalid sales regions" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SalesRights>
+            <SalesRightsType>01</SalesRightsType>
+            <RightsTerritory>WAT</RightsTerritory>
+          </SalesRights>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidSalesRightsRegion")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:region]).to eq("WAT")
+    end
   end
 end
