@@ -160,5 +160,23 @@ RSpec.shared_examples descriptor do
         expect(desc["content"]).to eq(data)
       end
     end
+
+    it "must raise failure for descriptions with no content" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <OtherText>
+            <TextTypeCode>18</TextTypeCode>
+            <TextFormat>05</TextFormat>
+            <Text><![CDATA[]]></Text>
+          </OtherText>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(failures.size).to eq(1)
+      failure = failures.first
+      expect(failure[:error_code]).to eq("EmptyDescription")
+    end
   end
 end
