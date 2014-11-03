@@ -4,6 +4,7 @@ module Blinkbox::Onix2Processor
 
     def up(node, state)
       @identifier = {}
+      state['contributors'] ||= []
     end
 
     def process(node, state)
@@ -43,8 +44,8 @@ module Blinkbox::Onix2Processor
         c['names']['display'] = c['names']['sort'].split(", ").reverse.join(" ")
       end
 
+      return product_failure(state, "MissingContributorName") if c['names']['display'].nil? || c['names']['display'].empty?
       c['biography'] = sanitize_html(@identifier['biographicalnote']) if @identifier['biographicalnote']
-
       state['book']['contributors'].push(c)
     end
   end

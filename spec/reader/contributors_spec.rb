@@ -55,6 +55,7 @@ RSpec.shared_examples descriptor do
       <ONIXmessage>
         <Product>
           <Contributor>
+            <PersonName>Valentine Cunningham</PersonName>
             <ContributorRole>A01</ContributorRole>
           </Contributor>
         </Product>
@@ -194,6 +195,7 @@ RSpec.shared_examples descriptor do
       <ONIXmessage>
         <Product>
           <Contributor>
+            <PersonName>Valentine Cunningham</PersonName>
             <BiographicalNote>A biography</BiographicalNote>
             <ContributorRole>A01</ContributorRole>
           </Contributor>
@@ -232,6 +234,7 @@ RSpec.shared_examples descriptor do
       <ONIXmessage>
         <Product>
           <Contributor>
+            <PersonName>Valentine Cunningham</PersonName>
             <BiographicalNote>A biography from contributor</BiographicalNote>
             <ContributorRole>A01</ContributorRole>
           </Contributor>
@@ -281,6 +284,7 @@ RSpec.shared_examples descriptor do
       <ONIXmessage>
         <Product>
           <Contributor>
+            <PersonName>Valentine Cunningham</PersonName>
             <BiographicalNote><![CDATA[I'm a baddie <script>alert("Malicious!");</script>haha!]]></BiographicalNote>
             <ContributorRole>A01</ContributorRole>
           </Contributor>
@@ -310,6 +314,7 @@ RSpec.shared_examples descriptor do
         <ONIXmessage>
           <Product>
             <Contributor>
+              <PersonName>Valentine Cunningham</PersonName>
               <BiographicalNote><![CDATA[#{data}]]></BiographicalNote>
               <ContributorRole>A01</ContributorRole>
             </Contributor>
@@ -336,6 +341,25 @@ RSpec.shared_examples descriptor do
       expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["names"]["display"]).to eq("Valentine Cunningham")
+    end
+
+    it "must extract publisher identifiers"
+
+    it "must raise a failure if a contributor has no name" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <ContributorRole>A01</ContributorRole>
+          </Contributor>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['contributors'].size).to eq(0)
+      expect(failures.size).to eq(1)
+      failure = failures.first
+      expect(failure[:error_code]).to eq("MissingContributorName")
     end
   end
 end

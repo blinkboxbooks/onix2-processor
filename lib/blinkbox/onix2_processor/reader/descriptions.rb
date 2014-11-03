@@ -4,6 +4,7 @@ module Blinkbox::Onix2Processor
 
     def up(node, state)
       @identifier = {}
+      state['descriptions'] ||= []
     end
 
     def process(node, state)

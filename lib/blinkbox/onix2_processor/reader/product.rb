@@ -4,8 +4,7 @@ module Blinkbox::Onix2Processor
 
     def up(node, state)
       state['book'] = {
-        'contributors' => [],
-        'descriptions' => []
+        'contributors' => []
       }
       state[:product_failures] = []
     end

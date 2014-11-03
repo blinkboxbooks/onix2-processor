@@ -47,6 +47,14 @@ RSpec.configure do |config|
     # TODO: Load up the correct schema here
     schema_dir = File.join(schema_root, "ingestion")
     Blinkbox::CommonMessaging.init_from_schema_at(schema_dir, schema_root)
+    @log = StringIO.new
+    Blinkbox::Onix2Processor::Processor.logger = Logger.new(@log)
+  end
+
+  config.after :each do
+    @log.rewind
+    log = @log.read
+    raise log unless log.empty?
   end
 
   config.include(Helpers)
