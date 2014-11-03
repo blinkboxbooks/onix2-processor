@@ -62,5 +62,21 @@ RSpec.shared_examples descriptor do
       expect_schema_compliance(book)
       expect(book['dates']['publish']).to eq("2013-02-04")
     end
+
+    it "must raise failure for dates which cannot be processed" do
+      invalid_date = "02312013"
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <PublicationDate>#{invalid_date}</PublicationDate>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(failures.size).to eq(1)
+      failure = failures.first
+      expect(failure[:error_code]).to eq("InvalidDate")
+      expect(failure[:data][:date]).to eq(invalid_date)
+    end
   end
 end
