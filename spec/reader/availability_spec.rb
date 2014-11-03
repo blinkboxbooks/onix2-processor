@@ -58,9 +58,9 @@ RSpec.shared_examples descriptor do
         </ONIXmessage>
         XML
         expect_schema_compliance(book)
-        expect(failures.size).to eq(1)
-        failure = failures.first
-        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        relevant_failures = failures("UnknownAvailabilityCode")
+        expect(relevant_failures.size).to eq(1)
+        failure = relevant_failures.first
         expect(failure[:data][:code]).to eq("NOPE")
       end
     end
@@ -103,9 +103,9 @@ RSpec.shared_examples descriptor do
         </ONIXmessage>
         XML
         expect_schema_compliance(book)
-        expect(failures.size).to eq(1)
-        failure = failures.first
-        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        relevant_failures = failures("UnknownAvailabilityCode")
+        expect(relevant_failures.size).to eq(1)
+        failure = relevant_failures.first
         expect(failure[:data][:code]).to eq("NOPE")
       end
     end
@@ -153,9 +153,9 @@ RSpec.shared_examples descriptor do
         </ONIXmessage>
         XML
         expect_schema_compliance(book)
-        expect(failures.size).to eq(1)
-        failure = failures.first
-        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        relevant_failures = failures("UnknownAvailabilityCode")
+        expect(relevant_failures.size).to eq(1)
+        failure = relevant_failures.first
         expect(failure[:data][:code]).to eq("NOPE")
       end
 
@@ -223,9 +223,9 @@ RSpec.shared_examples descriptor do
         </ONIXmessage>
         XML
         expect_schema_compliance(book)
-        expect(failures.size).to eq(1)
-        failure = failures.first
-        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        relevant_failures = failures("UnknownAvailabilityCode")
+        expect(relevant_failures.size).to eq(1)
+        failure = relevant_failures.first
         expect(failure[:data][:code]).to eq("NOPE")
       end
     end
@@ -237,9 +237,11 @@ RSpec.shared_examples descriptor do
       )
       state = { product_failures: [] }
       Blinkbox::Onix2Processor::Availability.allocate.process(node, state)
-      expect(state[:product_failures].size).to eq(1)
-      failure = state[:product_failures].first
-      expect(failure[:error_code]).to eq("UnknownAvailabilityType")
+      relevant_failures = state[:product_failures].select { |f|
+        f[:error_code] == "UnknownAvailabilityType"
+      }
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
       expect(failure[:data][:type]).to eq("somethingunexpected")
     end
   end

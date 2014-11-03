@@ -377,9 +377,9 @@ RSpec.shared_examples descriptor do
       XML
       expect_schema_compliance(book)
       expect(book['contributors'].size).to eq(0)
-      expect(failures.size).to eq(1)
-      failure = failures.first
-      expect(failure[:error_code]).to eq("MissingContributorName")
+      relevant_failures = failures("MissingContributorName")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
     end
   end
 end

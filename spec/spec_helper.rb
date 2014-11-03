@@ -30,8 +30,11 @@ module Helpers
     }.to_not raise_error
   end
 
-  def failures
-    @failures
+  def failures(matcher = nil)
+    return @failures if matcher.nil?
+    (@failures || []).select do |f|
+      f[:error_code].match(matcher)
+    end
   end
 end
 

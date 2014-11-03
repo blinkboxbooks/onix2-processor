@@ -174,9 +174,9 @@ RSpec.shared_examples descriptor do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(failures.size).to eq(1)
-      failure = failures.first
-      expect(failure[:error_code]).to eq("EmptyDescription")
+      relevant_failures = failures("EmptyDescription")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
     end
   end
 end

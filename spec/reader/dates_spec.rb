@@ -73,9 +73,9 @@ RSpec.shared_examples descriptor do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(failures.size).to eq(1)
-      failure = failures.first
-      expect(failure[:error_code]).to eq("InvalidDate")
+      relevant_failures = failures("InvalidDate")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
       expect(failure[:data][:date]).to eq(invalid_date)
     end
   end

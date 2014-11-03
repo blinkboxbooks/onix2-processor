@@ -70,5 +70,37 @@ RSpec.shared_examples descriptor do
         end
       end
     end
+
+    it "must raise a failure if an ISBN isn't 13 digits long" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <EAN13>145</EAN13>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidISBN")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:isbn]).to eq("145")
+      expect(book).to_not have_key('isbn')
+    end
+
+    it "must raise a failure if an ISBN doesn't start with 9780, 9781 or 979" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <EAN13>1234567890123</EAN13>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidISBN")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:isbn]).to eq("1234567890123")
+      expect(book).to_not have_key('isbn')
+    end
   end
 end

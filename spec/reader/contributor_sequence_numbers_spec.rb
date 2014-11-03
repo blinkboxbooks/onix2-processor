@@ -89,9 +89,9 @@ RSpec.shared_examples descriptor do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(failures.size).to eq(1)
-      failure = failures.first
-      expect(failure[:error_code]).to eq("IncorrectContributorSequenceNumbers")
+      relevant_failures = failures("IncorrectContributorSequenceNumbers")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
       expect(failure[:data][:sequence_numbers]).to eq([1, 3])
       expect(book["contributors"].size).to eq(2)
       contributors = Hash[book["contributors"].map { |c|
@@ -119,9 +119,9 @@ RSpec.shared_examples descriptor do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(failures.size).to eq(1)
-      failure = failures.first
-      expect(failure[:error_code]).to eq("IncorrectContributorSequenceNumbers")
+      relevant_failures = failures("IncorrectContributorSequenceNumbers")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
       expect(failure[:data][:sequence_numbers]).to eq([1, 1])
       expect(book["contributors"].size).to eq(2)
       expect(book["contributors"].map{ |c| c['seq'] }).to eq([1, 1])
