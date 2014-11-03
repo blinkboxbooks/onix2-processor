@@ -18,7 +18,7 @@ module Blinkbox::Onix2Processor
       single_contributor_augmentations!(state)
 
       state[:product_failures].each { |f| f[:isbn] = state['book']['isbn'] }
-      state[:failures].push(*state[:product_failures])
+      state[:failures].push(*state.delete(:product_failures))
       state[:on_book_metadata_complete].call(state['book'])
     end
 

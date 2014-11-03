@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "contributor images"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading contributor images" do
     it "must extract remote contributor images" do
       asset_url = "http://domain.com/path/to/image.jpg"
       book = process_xml_with_service <<-XML
@@ -69,8 +67,8 @@ RSpec.shared_examples descriptor do
       XML
       expect_schema_compliance(book)
       relevant_failures = failures("InvalidURI")
-        expect(relevant_failures.size).to eq(1)
-        failure = relevant_failures.first
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
       expect(failure[:data][:uri]).to eq(asset_url)
     end
   end

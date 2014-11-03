@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "dates"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading dates" do
     it "must extract announcement dates" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>

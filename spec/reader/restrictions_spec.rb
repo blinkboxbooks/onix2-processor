@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "restrictions"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading restrictions" do
     it "must prevent books targeted at iTunes from being sold" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>

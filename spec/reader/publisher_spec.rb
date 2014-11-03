@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "publishers"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading publishers" do
     it "must extract publisher names" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>

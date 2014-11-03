@@ -15,17 +15,13 @@ module Blinkbox::Onix2Processor
 
     def down(node, state)
       lang = @identifier['languagecode'].downcase
-      if lang !=~ /^[a-z]{3}$/
-        # TODO: Add to failures
-      end
+      return product_failure(state, "InvalidLanguage", language: lang) unless lang.match(/^[a-z]{3}$/)
 
       case @identifier['languagerole']
       when '01', '07'
         state['book']['languages'].push(lang)
       when '02', '06'
         state['book']['originalLanguages'].push(lang)
-      else
-        # TODO: What language role is this?
       end
     end
   end
@@ -48,10 +44,9 @@ module Blinkbox::Onix2Processor
             'languageoftext' => 'languages',
             'originallanguage' => 'originalLanguages'
           }[container]
-          # TODO: if type.nil?
           state['book'][type].push(lang)
         else
-          # TODO: add to failures
+          product_failure(state, "InvalidLanguage", language: lang)
         end
       end
     end

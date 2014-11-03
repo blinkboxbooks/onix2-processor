@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "subtitles"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading subtitles" do
     it "must extract from within the Title tag" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>

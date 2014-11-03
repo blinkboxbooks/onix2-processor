@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "contributor sequence numbers"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading contributor sequence numbers" do
     it "must extract contributor sequence numbers" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>

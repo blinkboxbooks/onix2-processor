@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "languages"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading languages" do
     %w{eng ENG spa fre}.each do |lang|
       it "must extract language codes from LanguageOfText: #{lang}" do
         book = process_xml_with_service <<-XML

@@ -1,8 +1,7 @@
-descriptor = ReaderExamples.add "availability"
 require "ostruct"
 
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading availability" do
     describe "AvailabilityCode" do
       {
         'IP' => true,

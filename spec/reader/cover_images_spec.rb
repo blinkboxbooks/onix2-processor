@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "cover images"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading cover images" do
     %w{04 06}.each do |front_cover_code|
       it "must extract remote book images (type #{front_cover_code})" do
         asset_url = "http://domain.com/path/to/image.jpg"

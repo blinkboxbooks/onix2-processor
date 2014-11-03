@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "discount codes"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading discount codes" do
     {
       "CSPLUS" => {
         "typename" => "CSPLUS",

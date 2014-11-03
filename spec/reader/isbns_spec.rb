@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "isbns"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading isbns" do
     it "must extract ISBN-13s" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>

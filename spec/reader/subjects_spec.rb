@@ -1,7 +1,5 @@
-descriptor = ReaderExamples.add "subjects"
-
-RSpec.shared_examples descriptor do
-  describe "while reading #{descriptor}" do
+context Blinkbox::Onix2Processor::Reader do
+  describe "while reading subjects" do
     it "must extract BASICMainSubject" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>
