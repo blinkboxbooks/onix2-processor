@@ -53,5 +53,25 @@ RSpec.shared_examples descriptor do
       expect(url['type']).to eq('remote')
       expect(url['uri']).to eq(asset_url)
     end
+
+    it "must raise error for non-URI contributor remote image" do
+      asset_url = "not a URI"
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <MediaFile>
+            <MediaFileTypeCode>08</MediaFileTypeCode>
+            <MediaFileLinkTypeCode>01</MediaFileLinkTypeCode>
+            <MediaFileLink>#{asset_url}</MediaFileLink>
+          </MediaFile>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(failures.size).to eq(1)
+      failure = failures.first
+      expect(failure[:error_code]).to eq("InvalidURI")
+      expect(failure[:data][:uri]).to eq(asset_url)
+    end
   end
 end

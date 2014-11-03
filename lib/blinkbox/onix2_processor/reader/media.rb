@@ -13,6 +13,8 @@ module Blinkbox::Onix2Processor
     end
 
     def down(node, state)
+      # Will raise an error if it's not a URI
+      URI.parse(@identifier['mediafilelink'])
       # MediaFileTypeCode = front cover etc
       if @identifier['mediafilelinktypecode'] == "01" # Only accept URLs
         case @identifier['mediafiletypecode']
@@ -34,6 +36,8 @@ module Blinkbox::Onix2Processor
           # Unusable mediatype
         end
       end
+    rescue URI::InvalidURIError
+      product_failure(state, "InvalidURI", uri: @identifier['mediafilelink'])
     end
 
     TYPES = YAML.load(open(File.join(__dir__, "../../../../config/mediafiles.yaml"))).freeze
