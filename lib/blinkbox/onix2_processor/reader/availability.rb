@@ -13,8 +13,13 @@ module Blinkbox::Onix2Processor
       if !node.value.nil?
         type = normalize_tags(node.position).last
         code = (node.value || "").upcase
-        state["book"]["availability"][CODE_MAP[type]] = {
-          "available" => CODES[type][code],
+        map_name = CODE_MAP[type]
+        return product_failure(state, "UnknownAvailabilityType", type: type) if map_name.nil?
+        availability = CODES[type][code]
+        return product_failure(state, "UnknownAvailabilityCode", code: code) if availability.nil?
+
+        state["book"]["availability"][map_name] = {
+          "available" => availability,
           "code" => code
         }
       end

@@ -1,4 +1,5 @@
 descriptor = ReaderExamples.add "availability"
+require "ostruct"
 
 RSpec.shared_examples descriptor do
   describe "while reading #{descriptor}" do
@@ -45,6 +46,23 @@ RSpec.shared_examples descriptor do
           expect(book["availability"]["availabilityCode"]["code"]).to eq(code)
         end
       end
+
+      it "must raise a failure for unknown availability codes" do
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <SupplyDetail>
+              <AvailabilityCode>nope</AvailabilityCode>
+            </SupplyDetail>
+          </Product>
+        </ONIXmessage>
+        XML
+        expect_schema_compliance(book)
+        expect(failures.size).to eq(1)
+        failure = failures.first
+        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        expect(failure[:data][:code]).to eq("NOPE")
+      end
     end
 
     describe "NotificationType" do
@@ -74,6 +92,21 @@ RSpec.shared_examples descriptor do
           expect(book["availability"]["notificationType"]["available"]).to eq(availability)
           expect(book["availability"]["notificationType"]["code"]).to eq(code)
         end
+      end
+
+      it "must raise a failure for unknown availability codes" do
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <NotificationType>nope</NotificationType>
+          </Product>
+        </ONIXmessage>
+        XML
+        expect_schema_compliance(book)
+        expect(failures.size).to eq(1)
+        failure = failures.first
+        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        expect(failure[:data][:code]).to eq("NOPE")
       end
     end
 
@@ -109,6 +142,21 @@ RSpec.shared_examples descriptor do
           expect(book["availability"]["publishingStatus"]["available"]).to eq(availability)
           expect(book["availability"]["publishingStatus"]["code"]).to eq(code)
         end
+      end
+
+      it "must raise a failure for unknown availability codes" do
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <PublishingStatus>nope</PublishingStatus>
+          </Product>
+        </ONIXmessage>
+        XML
+        expect_schema_compliance(book)
+        expect(failures.size).to eq(1)
+        failure = failures.first
+        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        expect(failure[:data][:code]).to eq("NOPE")
       end
 
       # TODO: Add forthcoming & dates
@@ -163,6 +211,36 @@ RSpec.shared_examples descriptor do
           expect(book["availability"]["productAvailability"]["code"]).to eq(code)
         end
       end
+
+      it "must raise a failure for unknown availability codes" do
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <SupplyDetail>
+              <ProductAvailability>nope</ProductAvailability>
+            </SupplyDetail>
+          </Product>
+        </ONIXmessage>
+        XML
+        expect_schema_compliance(book)
+        expect(failures.size).to eq(1)
+        failure = failures.first
+        expect(failure[:error_code]).to eq("UnknownAvailabilityCode")
+        expect(failure[:data][:code]).to eq("NOPE")
+      end
+    end
+
+    it "must raise a failure for unknown availability types" do
+      node = OpenStruct.new(
+        value: "whatever",
+        position: %w{ONIXMessage product somethingunexpected}
+      )
+      state = { product_failures: [] }
+      Blinkbox::Onix2Processor::Availability.allocate.process(node, state)
+      expect(state[:product_failures].size).to eq(1)
+      failure = state[:product_failures].first
+      expect(failure[:error_code]).to eq("UnknownAvailabilityType")
+      expect(failure[:data][:type]).to eq("somethingunexpected")
     end
   end
 end

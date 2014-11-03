@@ -11,5 +11,12 @@ class Blinkbox::Onix2Processor::Processor
     Sanitize.clean(html, @@valid_html)
   end
 
+  def product_failure(state, name, data = {})
+    state[:product_failures].push(
+      error_code: name,
+      data: data
+    )
+  end
+
   SHORT_TAGS = YAML.load(open(File.join(__dir__, "../../../../config/short_codes.yaml"))).freeze
 end

@@ -16,7 +16,7 @@ module Helpers
       "username" => "whomsoever"
     })
     book = nil
-    reader.each_book do |output|
+    @failures = reader.each_book do |output|
       book = output
     end
     book
@@ -28,6 +28,10 @@ module Helpers
       klass = Blinkbox::CommonMessaging.class_from_content_type("application/vnd.blinkbox.books.#{doc['$schema']}+json")
       klass.new(doc)
     }.to_not raise_error
+  end
+
+  def failures
+    @failures
   end
 end
 

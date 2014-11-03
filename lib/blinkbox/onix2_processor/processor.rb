@@ -42,14 +42,14 @@ class Blinkbox::Onix2Processor::Processor
 
         begin
           # Is this node the declared node and opening?
-          if root_node and node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
+          if root_node && node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
             @klasses[position].up(node, state)
           end
 
           @klasses[position].process(node, state)
 
           # Is this node the declared node and closing?
-          if root_node and (node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT or node.self_closing?)
+          if root_node && (node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT || node.self_closing?)
             @klasses[position].down(node, state)
           end
         rescue => e
