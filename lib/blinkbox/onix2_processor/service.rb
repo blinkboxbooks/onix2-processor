@@ -128,9 +128,8 @@ module Blinkbox
               )
 
               message_id = @exchange.publish(rej_obj, message_id_chain: metadata[:headers]['message_id_chain'] || [])
-              # TODO: Proper error message
               @logger.info(
-                short_message: "Issues were found with formatting of an ONIX file",
+                short_message: "Issues were found with formatting of an ONIX file, check the overview service for details.",
                 event: :onix_invalid,
                 message_id: message_id,
                 data: {
@@ -145,15 +144,6 @@ module Blinkbox
               duration: toc(:file)
             )
             :ack
-          # TODO: Determine temporary errors
-          rescue => e
-            puts e.backtrace
-            # TODO: expand this log message
-            @logger.warn(
-              stort_message: "Temporary error in processing, requeuing. (#{e.message})",
-              backtrace: e.backtrace
-            )
-            :retry
           end
         end
       end

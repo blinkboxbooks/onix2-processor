@@ -157,8 +157,6 @@ context Blinkbox::Onix2Processor::Reader do
         failure = relevant_failures.first
         expect(failure[:data][:code]).to eq("NOPE")
       end
-
-      # TODO: Add forthcoming & dates
     end
 
     describe "ProductAvailability" do
