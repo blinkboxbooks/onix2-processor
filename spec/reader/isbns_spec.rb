@@ -100,5 +100,68 @@ context Blinkbox::Onix2Processor::Reader do
       expect(failure[:data][:isbn]).to eq("1234567890123")
       expect(book).to_not have_key('isbn')
     end
+
+    it "must raise a failure if a related product ISBN isn't 13 digits long" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <RelatedProduct>
+            <RelationCode>13</RelationCode>
+            <ProductIdentifier>
+              <ProductIDType>15</ProductIDType>
+              <IDValue>12345678</IDValue>
+            </ProductIdentifier>
+          </RelatedProduct>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidRelatedISBN")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:isbn]).to eq("12345678")
+    end
+
+    it "must raise a failure if a related product ISBN doesn't start with 9780, 9781 or 979" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <RelatedProduct>
+            <RelationCode>13</RelationCode>
+            <ProductIdentifier>
+              <ProductIDType>15</ProductIDType>
+              <IDValue>nope</IDValue>
+            </ProductIdentifier>
+          </RelatedProduct>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidRelatedISBN")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:isbn]).to eq("nope")
+    end
+
+    it "must raise a failure if a related product ISBN doesn't start with 9780, 9781 or 979" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <RelatedProduct>
+            <RelationCode>zz</RelationCode>
+            <ProductIdentifier>
+              <ProductIDType>15</ProductIDType>
+              <IDValue>9780111222333</IDValue>
+            </ProductIdentifier>
+          </RelatedProduct>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidRelationCode")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:code]).to eq("zz")
+    end
   end
 end

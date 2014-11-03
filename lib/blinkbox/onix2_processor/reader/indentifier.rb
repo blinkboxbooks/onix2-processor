@@ -40,7 +40,9 @@ module Blinkbox::Onix2Processor
       if %w{15 03}.include? @identifier['productidtype']
         isbn = @identifier['idvalue']
 
-        # TODO if relationcode isn't an expected number
+        return product_failure(state, "InvalidRelatedISBN", isbn: isbn) if isbn.nil? || !isbn.match(/^97(?:80|81|9\d)\d{9}$/)
+        return product_failure(state, "InvalidRelationCode", code: @identifier['relationcode']) if @identifier['relationcode'].nil? || !@identifier['relationcode'].match(/^\d{2}$/)
+        
         (state['book']['related'] ||= []).push(
           "classification" => [{
             "realm" => "isbn",
