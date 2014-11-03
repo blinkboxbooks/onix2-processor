@@ -7,13 +7,13 @@ context Blinkbox::Onix2Processor::Service do
       @options = Blinkbox::CommonConfig.new
     end
 
-    it "must create pending assets & mapping updates queues if they are not present" do
+    it "must create pending assets queue if they are not present" do
       queue = stub_const("Blinkbox::CommonMessaging::Queue", double(Blinkbox::CommonMessaging::Queue))
       allow(queue).to receive(:new)
+      exchange = stub_const("Blinkbox::CommonMessaging::Exchange", double(Blinkbox::CommonMessaging::Exchange))
+      allow(exchange).to receive(:new)
       described_class.new(@options)
       expect(queue).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
-      pending "Mapping definitions"
-      expect(queue).to have_received(:new).with("Marvin.onix2_processor.mapping_updates", exchange: "Mapping", bindings: anything)
     end
 
     it "must not start if logging options are missing" do
@@ -28,9 +28,9 @@ context Blinkbox::Onix2Processor::Service do
   describe "#start" do
     before :each do
       @service = described_class.allocate
-      allow(@service).to receive(:process_epub)
+      allow(@service).to receive(:process_message)
       @queue = instance_double(Blinkbox::CommonMessaging::Queue)
-      def @queue.subscribe(&block)
+      def @queue.subscribe(opts = {}, &block)
         @subscribe_block = block
       end
       @service.instance_variable_set(:'@queue', @queue)
@@ -43,21 +43,6 @@ context Blinkbox::Onix2Processor::Service do
 
     def fake_publish(metadata, obj)
       @queue.instance_variable_get(:'@subscribe_block').call(metadata, obj)
-    end
-
-    it "must send IngestionFilePendingV2 messages for processing" do
-      metadata = { headers: {} }
-      obj = Blinkbox::CommonMessaging::IngestionFilePendingV2.allocate
-      expect(fake_publish(metadata, obj)).to eq(:ack)
-      expect(@service).to have_received(:process_message).with(metadata, obj)
-    end
-
-    it "must log an error and reject other messages" do
-      metadata = { headers: {} }
-      obj = Blinkbox::CommonMessaging::IngestionBookMetadataV2.allocate
-      expect(fake_publish(metadata, obj)).to eq(:reject)
-      expect(@service).to_not have_received(:process_message).with(metadata, obj)
-      expect(@logger).to have_received(:error)
     end
   end
 
