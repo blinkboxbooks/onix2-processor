@@ -45,13 +45,16 @@ module Blinkbox::Onix2Processor
 
         regions = {}
         [@identifier['countrycode'], @identifier['territory']].compact.flatten.each do |region|
+          next product_failure(state, "InvalidPriceRegion", region: region) if !region.match(/^[A-Z]{2}$/) && !%w{WORLD ROW}.include?(region)
           regions[region] = true
         end
         [@identifier['countryexcluded'], @identifier['territoryexcluded']].compact.flatten.each do |region|
+          next product_failure(state, "InvalidPriceRegion", region: region) if !region.match(/^[A-Z]{2}$/) && !%w{WORLD ROW}.include?(region)
           regions[region] = false
         end
 
-        # TODO: Validate currency value
+        return product_failure(state, "InvalidPriceAmount", amount: @identifier['priceamount']) if @identifier['priceamount'].nil? || !@identifier['priceamount'].match(/^\d+(?:\.\d+)?$/)
+        return product_failure(state, "InvalidPriceCurrency", currency: @identifier['currencycode']) if @identifier['priceamount'].nil? || !@identifier['currencycode'].match(/^[a-z]{3}$/i)
 
         price = {
           'includesTax'       => (@identifier['pricetypecode'].to_i % 10) == 2,
@@ -68,15 +71,23 @@ module Blinkbox::Onix2Processor
           code_grouping ||= DISCOUNT_CODES[:fallback]
           price['discountRate'] = code_grouping[@identifier['discountcode'].downcase] if @identifier['discountcode']
         else
-          # TODO: Unknown discount code
+          return product_failure(state, "InvalidDiscountCodeType", type: @identifier['discountcodetype'])
         end
 
         if !price['discountRate'] && @identifier['discountpercent'] && @identifier['discountpercent'] =~ /^\d+(?:\.\d+)?$/
           price['discountRate'] = @identifier['discountpercent'].to_f / 100.0
         end
 
-        price['validFrom'] = Dates.process_date(@identifier['priceeffectivefrom']) if @identifier['priceeffectivefrom']
-        price['validUntil'] = Dates.process_date(@identifier['priceeffectiveuntil']) if @identifier['priceeffectiveuntil']
+        begin
+          price['validFrom'] = Dates.process_date(@identifier['priceeffectivefrom']) if @identifier['priceeffectivefrom']
+        rescue
+          return product_failure(state, "InvalidDate", date: @identifier['priceeffectivefrom'])
+        end
+        begin
+          price['validUntil'] = Dates.process_date(@identifier['priceeffectiveuntil']) if @identifier['priceeffectiveuntil']
+        rescue
+          return product_failure(state, "InvalidDate", date: @identifier['priceeffectiveuntil'])
+        end
 
         (state['book']['prices'] ||= []).push(price)
       end

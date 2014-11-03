@@ -8,6 +8,7 @@ context Blinkbox::Onix2Processor::Reader do
             <Price>
               <PriceTypeCode>01</PriceTypeCode>
               <CurrencyCode>GBP</CurrencyCode>
+              <PriceAmount>3.14</PriceAmount>
             </Price>
           </SupplyDetail>
         </Product>
@@ -28,6 +29,7 @@ context Blinkbox::Onix2Processor::Reader do
             <Price>
               <PriceTypeCode>02</PriceTypeCode>
               <CurrencyCode>GBP</CurrencyCode>
+              <PriceAmount>3.14</PriceAmount>
             </Price>
           </SupplyDetail>
         </Product>
@@ -48,6 +50,7 @@ context Blinkbox::Onix2Processor::Reader do
             <Price>
               <PriceTypeCode>41</PriceTypeCode>
               <CurrencyCode>GBP</CurrencyCode>
+              <PriceAmount>3.14</PriceAmount>
             </Price>
           </SupplyDetail>
         </Product>
@@ -68,6 +71,7 @@ context Blinkbox::Onix2Processor::Reader do
             <Price>
               <PriceTypeCode>42</PriceTypeCode>
               <CurrencyCode>GBP</CurrencyCode>
+              <PriceAmount>3.14</PriceAmount>
             </Price>
           </SupplyDetail>
         </Product>
@@ -109,6 +113,7 @@ context Blinkbox::Onix2Processor::Reader do
               <Price>
                 <PriceTypeCode>01</PriceTypeCode>
                 <CurrencyCode>#{currency}</CurrencyCode>
+                <PriceAmount>3.14</PriceAmount>
               </Price>
             </SupplyDetail>
           </Product>
@@ -222,6 +227,137 @@ context Blinkbox::Onix2Processor::Reader do
       price = book['prices'].first
       expect(price['applicableRegions']['UK']).to eq(true)
       expect(price['applicableRegions']['US']).to eq(true)
+    end
+
+    it "must extract price valid from dates" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <Price>
+              <PriceTypeCode>01</PriceTypeCode>
+              <CurrencyCode>GBP</CurrencyCode>
+              <PriceAmount>3.14</PriceAmount>
+              <PriceEffectiveFrom>20140506</PriceEffectiveFrom>
+            </Price>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['prices'].size).to eq(1)
+      price = book['prices'].first
+      expect(price['validFrom']).to eq("2014-05-06")
+    end
+
+    it "must extract price valid until dates" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <Price>
+              <PriceTypeCode>01</PriceTypeCode>
+              <CurrencyCode>GBP</CurrencyCode>
+              <PriceAmount>3.14</PriceAmount>
+              <PriceEffectiveUntil>20140506</PriceEffectiveUntil>
+            </Price>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['prices'].size).to eq(1)
+      price = book['prices'].first
+      expect(price['validUntil']).to eq("2014-05-06")
+    end
+
+    it "must raise failure for non-numeric prices" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <Price>
+              <PriceTypeCode>01</PriceTypeCode>
+              <PriceAmount>nope</PriceAmount>
+              <CurrencyCode>GBP</CurrencyCode>
+            </Price>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidPriceAmount")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:amount]).to eq("nope")
+    end
+
+    it "must raise failure for invalid currency code" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <Price>
+              <PriceTypeCode>01</PriceTypeCode>
+              <PriceAmount>3.14</PriceAmount>
+              <CurrencyCode>nope</CurrencyCode>
+            </Price>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidPriceCurrency")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:currency]).to eq("nope")
+    end
+
+    it "must raise failure for invalid currency code" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <Price>
+              <PriceTypeCode>01</PriceTypeCode>
+              <PriceAmount>3.14</PriceAmount>
+              <CurrencyCode>GBP</CurrencyCode>
+              <CountryCode>GBP</CountryCode>
+            </Price>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidPriceRegion")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:region]).to eq("GBP")
+    end
+
+    %w{PriceEffectiveUntil PriceEffectiveFrom}.each do |tag|
+      it "must raise failure for valid from dates which cannot be processed" do
+        invalid_date = "nope"
+        book = process_xml_with_service <<-XML
+        <ONIXmessage>
+          <Product>
+            <SupplyDetail>
+              <Price>
+                <PriceTypeCode>01</PriceTypeCode>
+                <CurrencyCode>GBP</CurrencyCode>
+                <PriceAmount>3.14</PriceAmount>
+                <#{tag}>#{invalid_date}</#{tag}>
+              </Price>
+            </SupplyDetail>
+          </Product>
+        </ONIXmessage>
+        XML
+        expect_schema_compliance(book)
+        relevant_failures = failures("InvalidDate")
+        expect(relevant_failures.size).to eq(1)
+        failure = relevant_failures.first
+        expect(failure[:data][:date]).to eq(invalid_date)
+      end
     end
   end
 end

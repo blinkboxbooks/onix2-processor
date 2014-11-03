@@ -40,6 +40,7 @@ context Blinkbox::Onix2Processor::Reader do
                 <Price>
                   <PriceTypeCode>02</PriceTypeCode>
                   <CurrencyCode>GBP</CurrencyCode>
+                  <PriceAmount>3.14</PriceAmount>
                   <DiscountCoded>
                     <DiscountCodeType>02</DiscountCodeType>
                     <DiscountCodeTypeName>#{details['typename']}</DiscountCodeTypeName>
@@ -68,6 +69,7 @@ context Blinkbox::Onix2Processor::Reader do
               <Price>
                 <PriceTypeCode>02</PriceTypeCode>
                 <CurrencyCode>GBP</CurrencyCode>
+                <PriceAmount>3.14</PriceAmount>
                 <DiscountCoded>
                   <DiscountCodeType>02</DiscountCodeType>
                   <DiscountPercent>#{pc}</DiscountPercent>

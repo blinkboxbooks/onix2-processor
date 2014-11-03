@@ -52,7 +52,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(url['uri']).to eq(asset_url)
     end
 
-    it "must raise error for non-URI contributor remote image" do
+    it "must raise failure for non-URI contributor remote image" do
       asset_url = "not a URI"
       book = process_xml_with_service <<-XML
       <ONIXmessage>
