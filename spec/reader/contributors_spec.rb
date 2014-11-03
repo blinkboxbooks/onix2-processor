@@ -343,7 +343,27 @@ RSpec.shared_examples descriptor do
       expect(book["contributors"].first["names"]["display"]).to eq("Valentine Cunningham")
     end
 
-    it "must extract publisher identifiers"
+    it "must extract publisher identifiers" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <PersonName>Valentine Cunningham</PersonName>
+            <ContributorRole>A01</ContributorRole>
+            <PersonNameIdentifier>
+              <PersonNameIDType>01</PersonNameIDType>
+              <IDTypeName>HCP Author number</IDTypeName>
+              <IDValue>7421</IDValue>
+            </PersonNameIdentifier>
+          </Contributor>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book["contributors"].size).to eq(1)
+      c = book["contributors"].first
+      expect(c["ids"]["HCP Author number"]).to eq("7421")
+    end
 
     it "must raise a failure if a contributor has no name" do
       book = process_xml_with_service <<-XML

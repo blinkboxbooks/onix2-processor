@@ -5,6 +5,7 @@ module Blinkbox::Onix2Processor
     def up(node, state)
       @identifier = {}
       state['contributors'] ||= []
+      state[:PNIs] = []
     end
 
     def process(node, state)
@@ -24,7 +25,8 @@ module Blinkbox::Onix2Processor
           'suffixToKey'       => @identifier['suffixtokey'],
           'lettersAfterNames' => @identifier['lettersafternames'],
           'titlesAfterNames'  => @identifier['titlesafternames'],
-        }.delete_if { |k, n| n.nil? || n.empty? }
+        }.delete_if { |k, n| n.nil? || n.empty? },
+        "ids" => {}
       }
 
       c['names']['display'] = @identifier['personname'] || @identifier['corporatename'] || c['names'].values.join(' ')
@@ -46,9 +48,41 @@ module Blinkbox::Onix2Processor
 
       return product_failure(state, "MissingContributorName") if c['names']['display'].nil? || c['names']['display'].empty?
 
+      # Person name identifiers
+      c['ids'] = Hash[state.delete(:PNIs).map { |pni|
+        type = case pni['personnameidtype']
+        when "16"
+          "isni"
+        when "01"
+          pni['idtypename']
+        else
+          # We don't deal with these categorisation types. See ONIX codelist 101
+          next
+        end
+          
+        [type, pni['idvalue']]
+      }.compact]
+
       c['seq'] = @identifier['sequencenumber'].to_i if !@identifier['sequencenumber'].nil? && @identifier['sequencenumber'].match(/^\d+$/)
       c['biography'] = sanitize_html(@identifier['biographicalnote']) if @identifier['biographicalnote']
       state['book']['contributors'].push(c)
+    end
+  end
+
+  class ContributorIdentifiers < Processor
+    handles_xpath '/onixmessage/product/contributor/personnameidentifier'
+
+    def up(node, state)
+      @identifier = {}
+    end
+
+    def process(node, state)
+      container = normalize_tags(node.position).last
+      @identifier[container] = node.value.strip if %w{#text #cdata-section}.include?(node.name)
+    end
+
+    def down(node, state)
+      state[:PNIs].push(@identifier)
     end
   end
 end
