@@ -7,7 +7,10 @@ module Blinkbox::Onix2Processor
     end
 
     def process(node, state)
-      state['book']['statistics']['pages'] = node.value.to_i if %w{#text #cdata-section}.include?(node.name)
+      if %w{#text #cdata-section}.include?(node.name)
+        return product_failure(state, "InvalidNumberOfPages", number: node.value) unless node.value.match(/^\d+$/)
+        state['book']['statistics']['pages'] = node.value.to_i
+      end
     end
   end
 end

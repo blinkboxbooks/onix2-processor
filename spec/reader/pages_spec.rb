@@ -109,6 +109,21 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['statistics']['pages']).to eq(9)
     end
 
+    it "must raise failure for non-numeric number of pages" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <NumberOfPages>s</NumberOfPages>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidNumberOfPages")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:number]).to eq("s")
+    end
+
     it "must raise failure for non-numeric extents" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>
