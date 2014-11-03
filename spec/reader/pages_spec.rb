@@ -110,5 +110,24 @@ RSpec.shared_examples descriptor do
       expect_schema_compliance(book)
       expect(book['statistics']['pages']).to eq(9)
     end
+
+    it "must raise failure for non-numeric extents" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Extent>
+            <ExtentType>08</ExtentType>
+            <ExtentValue>s</ExtentValue>
+            <ExtentUnit>03</ExtentUnit>
+          </Extent>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(failures.size).to eq(1)
+      failure = failures.first
+      expect(failure[:error_code]).to eq("InvalidExtent")
+      expect(failure[:data][:extent]).to eq("s")
+    end
   end
 end

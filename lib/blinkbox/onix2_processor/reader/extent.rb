@@ -20,11 +20,11 @@ module Blinkbox::Onix2Processor
     def down(node, state)
       case @identifier['extentunit']
       when "03"
-        # TODO: Issue if extentvalue isn't a number
+        return product_failure(state, "InvalidExtent", extent: @identifier['extentvalue']) if @identifier['extentvalue'].nil? || !@identifier['extentvalue'].match(/^\d+$/)
         value = @identifier['extentvalue'].to_i
         case @identifier['extenttype']
         when "00", "08"
-          # Bets values
+          # Best values
           state['book']['statistics']['pages'] = value
         when "10"
           # Less important values
