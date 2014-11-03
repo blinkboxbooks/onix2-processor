@@ -335,6 +335,31 @@ context Blinkbox::Onix2Processor::Reader do
       expect(failure[:data][:region]).to eq("GBP")
     end
 
+    it "must raise failure for invalid tax code" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <Price>
+              <CurrencyCode>GBP</CurrencyCode>
+              <PriceTypeCode>01</PriceTypeCode>
+              <PriceAmount>10.44</PriceAmount>
+              <TaxRateCode1>!</TaxRateCode1>
+              <TaxRatePercent1>20</TaxRatePercent1>
+              <TaxableAmount1>8.7</TaxableAmount1>
+              <TaxAmount1>1.74</TaxAmount1>
+            </Price>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      relevant_failures = failures("InvalidPriceTaxCode")
+      expect(relevant_failures.size).to eq(1)
+      failure = relevant_failures.first
+      expect(failure[:data][:code]).to eq("!")
+    end
+
     %w{PriceEffectiveUntil PriceEffectiveFrom}.each do |tag|
       it "must raise failure for valid from dates which cannot be processed" do
         invalid_date = "nope"

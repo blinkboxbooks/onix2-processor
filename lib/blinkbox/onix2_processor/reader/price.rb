@@ -36,8 +36,10 @@ module Blinkbox::Onix2Processor
             tax['percent'] = @identifier["taxratepercent#{n}"].to_f / 100.0 if @identifier["taxratepercent#{n}"]
             tax['amount'] = @identifier["taxamount#{n}"].to_f if @identifier["taxamount#{n}"]
             tax['taxableAmount'] = @identifier["taxableamount#{n}"].to_f if @identifier["taxableamount#{n}"]
+          when nil
+            # No tax specified
           else
-            # TODO: Raise warning, invalid tax code
+            return product_failure(state, "InvalidPriceTaxCode", code: @identifier["taxratecode#{n}"])
           end
 
           taxes.push(tax) unless tax.nil?
