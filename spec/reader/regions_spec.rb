@@ -88,6 +88,61 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['salesRights'].size).to eq(1)
       expect(book['salesRights']['WORLD']).to eq(true)
     end
+
+    
+    it "must extract NotForSale tags" do
+      book = process_xml_with_service <<-XML
+      <ONIXMessage>
+        <Product>
+          <NotForSale>
+            <RightsCountry>GB</RightsCountry>
+          </NotForSale>
+        </Product>
+      </ONIXMessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['salesRights'].size).to eq(1)
+      expect(book['salesRights']['GB']).to eq(false)
+    end
+
+    it "must adhere to NotForSale tags ahead of other sales regions" do
+      book = process_xml_with_service <<-XML
+      <ONIXMessage>
+        <Product>
+          <NotForSale>
+            <RightsCountry>GB</RightsCountry>
+          </NotForSale>
+          <SalesRights>
+            <SalesRightsType>01</SalesRightsType>
+            <RightsTerritory>GB</RightsTerritory>
+          </SalesRights>
+        </Product>
+      </ONIXMessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['salesRights'].size).to eq(1)
+      expect(book['salesRights']['GB']).to eq(false)
+    end
+
+    it "must convert WORLD to ROW if other regions are specified" do
+      book = process_xml_with_service <<-XML
+      <ONIXMessage>
+        <Product>
+          <NotForSale>
+            <RightsCountry>GB</RightsCountry>
+          </NotForSale>
+          <SalesRights>
+            <SalesRightsType>01</SalesRightsType>
+            <RightsTerritory>WORLD</RightsTerritory>
+          </SalesRights>
+        </Product>
+      </ONIXMessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['salesRights'].size).to eq(2)
+      expect(book['salesRights']['GB']).to eq(false)
+      expect(book['salesRights']['ROW']).to eq(true)
+    end
     
     it "must raise failure for invalid supply regions" do
       book = process_xml_with_service <<-XML
