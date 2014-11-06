@@ -379,5 +379,23 @@ context Blinkbox::Onix2Processor::Reader do
       expect(relevant_failures.size).to eq(1)
       failure = relevant_failures.first
     end
+
+    it "must extract double encoded contributor names" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <Contributor>
+            <PersonName>Someone Guin&amp;eacute;</PersonName>
+            <PersonNameInverted>Guin&amp;eacute;, Raquel P. F.</PersonNameInverted>
+            <ContributorRole>A01</ContributorRole>
+          </Contributor>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book["contributors"].size).to eq(1)
+      expect(book["contributors"].first["names"]["display"]).to eq("Someone Guiné")
+      expect(book["contributors"].first["names"]["sort"]).to eq("Guiné, Raquel P. F.")
+    end
   end
 end

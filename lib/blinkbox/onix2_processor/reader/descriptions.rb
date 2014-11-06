@@ -33,7 +33,7 @@ module Blinkbox::Onix2Processor
         }
 
         text['author'] = @identifier['textauthor'] if @identifier['textauthor']
-        text['content'] = HTMLEntities.new.decode(text['content']) if text['content'] =~ /&(?:#?\d{2,3}|[a-z]+);/
+        text['content'].clever_decode!
         text['content'] = sanitize_html(text['content'])
         return product_failure(state, "EmptyDescription") if text['content'].empty?
         (state['book'][type] ||= []).push(text)

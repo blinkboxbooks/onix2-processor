@@ -64,7 +64,8 @@ module Blinkbox::Onix2Processor
       }.compact]
 
       c['seq'] = @identifier['sequencenumber'].to_i if !@identifier['sequencenumber'].nil? && @identifier['sequencenumber'].match(/^\d+$/)
-      c['biography'] = sanitize_html(@identifier['biographicalnote']) if @identifier['biographicalnote']
+      c['biography'] = sanitize_html(@identifier['biographicalnote'].clever_decode!) if @identifier['biographicalnote']
+      c['names'].each_pair { |k, v| v.clever_decode! }
       state['book']['contributors'].push(c)
     end
   end

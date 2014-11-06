@@ -1,4 +1,5 @@
 require "sanitize"
+require "htmlentities"
 
 class Blinkbox::Onix2Processor::Processor
   def normalize_tags(array)
@@ -19,4 +20,14 @@ class Blinkbox::Onix2Processor::Processor
   end
 
   SHORT_TAGS = YAML.load(open(File.join(__dir__, "../../../../config/short_codes.yaml"))).freeze
+end
+
+class String
+  def clever_decode!
+    2.times do
+      break unless self.match(/&(?:#?\d{2,3}|[a-z]+);/)
+      self.replace(HTMLEntities.new.decode(self))
+    end
+    self
+  end
 end
