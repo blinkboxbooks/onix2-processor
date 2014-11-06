@@ -13,7 +13,7 @@ class String
     return nil if self.empty?
     return self.to_i if self.to_i.to_s == self
 
-    parts = self.downcase.split('-')
+    parts = self.downcase.split(/[ -]/)
 
     case parts.length
     when 1

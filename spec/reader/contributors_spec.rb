@@ -250,7 +250,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book["descriptions"].size).to eq(1)
     end
 
-    it "must not extract biographies from othertext details for books with more than one contributor" do
+    it "must not push biographies from othertext details to the contributor level for books with more than one contributor" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>
         <Product>

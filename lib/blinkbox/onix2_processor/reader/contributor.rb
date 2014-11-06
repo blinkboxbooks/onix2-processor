@@ -25,7 +25,7 @@ module Blinkbox::Onix2Processor
           'suffixToKey'       => @identifier['suffixtokey'],
           'lettersAfterNames' => @identifier['lettersafternames'],
           'titlesAfterNames'  => @identifier['titlesafternames'],
-        }.delete_if { |k, n| n.nil? || n.empty? },
+        }.delete_if { |k, n| n.nil? || n.strip.empty? },
         "ids" => {}
       }
 

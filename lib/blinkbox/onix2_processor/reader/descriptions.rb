@@ -13,7 +13,7 @@ module Blinkbox::Onix2Processor
 
       unless node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT
         content = (node.name == "#cdata-section" ? node.value : node.inner_xml).strip
-        @identifier[container] = content unless content.nil? || content.empty?
+        @identifier[container] = content unless content.empty?
       end
     end
 
@@ -40,6 +40,6 @@ module Blinkbox::Onix2Processor
       end
     end
 
-    TYPES = YAML.load(open(File.join(__dir__, "../../../../config/othertext.yaml"))).freeze
+    TYPES = yaml_config("othertext")
   end
 end

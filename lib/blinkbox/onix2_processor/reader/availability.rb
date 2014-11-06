@@ -32,6 +32,6 @@ module Blinkbox::Onix2Processor
       "notificationtype" => "notificationType"
     }
 
-    CODES = YAML.load(open(File.join(__dir__, "../../../../config/availability.yaml"))).freeze
+    CODES = yaml_config('availability')
   end
 end

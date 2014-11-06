@@ -2,7 +2,7 @@ require_relative "reader/base"
 
 class Blinkbox::Onix2Processor::Processor
   @@registered_processors = {}
-  @@valid_html = YAML.load(open(File.join(__dir__, "../../../config/valid_html.yaml")))
+  @@valid_html = yaml_config("valid_html")
 
   # Instantiate a blackhole logger by default
   @@logger = Class.new { def method_missing(*args); end }

@@ -40,6 +40,6 @@ module Blinkbox::Onix2Processor
       product_failure(state, "InvalidURI", uri: @identifier['mediafilelink'])
     end
 
-    TYPES = YAML.load(open(File.join(__dir__, "../../../../config/mediafiles.yaml"))).freeze
+    TYPES = yaml_config("mediafiles")
   end
 end

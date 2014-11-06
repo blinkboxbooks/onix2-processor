@@ -1,5 +1,6 @@
 require "sanitize"
 require "htmlentities"
+require "yaml"
 
 class Blinkbox::Onix2Processor::Processor
   def normalize_tags(array)
@@ -19,7 +20,11 @@ class Blinkbox::Onix2Processor::Processor
     )
   end
 
-  SHORT_TAGS = YAML.load(open(File.join(__dir__, "../../../../config/short_codes.yaml"))).freeze
+  def self.yaml_config(file)
+    YAML.load(open(File.join(__dir__, "../../../../config/#{file}.yaml"))).freeze
+  end
+
+  SHORT_TAGS = yaml_config("short_codes")
 end
 
 class String

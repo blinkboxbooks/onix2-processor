@@ -13,14 +13,14 @@ module Blinkbox::Onix2Processor
 
       unless node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT
         content = (node.name == "#cdata-section" ? node.value : node.inner_xml).strip
-        @identifier[container] = content unless content.nil? || content.empty?
+        @identifier[container] = content unless content.empty?
       end
     end
 
     def down(node, state)
       case @identifier['extentunit']
       when "03"
-        return product_failure(state, "InvalidExtent", extent: @identifier['extentvalue']) if @identifier['extentvalue'].nil? || !@identifier['extentvalue'].match(/^\d+$/)
+        return product_failure(state, "InvalidExtent", extent: @identifier['extentvalue']) if (@identifier['extentvalue'].nil? || !@identifier['extentvalue'].match(/^\d+$/))
         value = @identifier['extentvalue'].to_i
         case @identifier['extenttype']
         when "00", "08"
