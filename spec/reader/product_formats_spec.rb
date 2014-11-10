@@ -1,7 +1,7 @@
 context Blinkbox::Onix2Processor::Reader do
   describe "while reading epub types" do
     {
-      false => %w{023 029 099},
+      false => %w{000 023 029 099},
       true => %w{002 022}
     }.each_pair do |incompatible, codes|
       codes.each do |code|
