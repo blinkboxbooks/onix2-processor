@@ -76,7 +76,7 @@ module Blinkbox::Onix2Processor
           return product_failure(state, "InvalidDiscountCodeType", type: @identifier['discountcodetype'])
         end
 
-        if !price['discountRate'] && @identifier['discountpercent'] && @identifier['discountpercent'] =~ /^\d+(?:\.\d+)?$/
+        if !price['discountRate'] && @identifier['discountpercent'] =~ /^\d+(?:\.\d+)?$/
           price['discountRate'] = @identifier['discountpercent'].to_f / 100.0
         end
 
@@ -85,6 +85,7 @@ module Blinkbox::Onix2Processor
         rescue
           return product_failure(state, "InvalidDate", date: @identifier['priceeffectivefrom'])
         end
+        
         begin
           price['validUntil'] = Dates.process_date(@identifier['priceeffectiveuntil']) if @identifier['priceeffectiveuntil']
         rescue

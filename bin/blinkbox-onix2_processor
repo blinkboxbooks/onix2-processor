@@ -12,11 +12,7 @@ begin
 rescue SystemExit, Interrupt, SignalException
   processor.stop
 rescue Exception => e
-  begin
-    processor.stop
-  rescue
-    # Try and stop the processor, just in case it'll help in this crash scenario
-  end
+  processor.stop rescue nil
   if processor && processor.logger
     processor.logger.fatal e
   else

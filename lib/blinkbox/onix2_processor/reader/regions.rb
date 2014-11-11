@@ -34,7 +34,9 @@ module Blinkbox::Onix2Processor
 
     def down(node, state)
       exclude = !%W{01 02}.include?(@identifier['salesrightstype'])
-      ([@identifier['rightscountry'],@identifier['rightsterritory']].join(' ')).split(' ').each do |region|
+      [ @identifier['rightscountry'], @identifier['rightsterritory'] ].compact.map { |regionslist|
+        regionslist.split(' ')
+      }.flatten.each do |region|
         next product_failure(state, "InvalidSalesRightsRegion", region: region) if !region.match(/^[A-Z]{2}$/) && !%w{WORLD ROW}.include?(region)
         RegionHelper.set_region(state, 'salesRights', region, !exclude)
       end

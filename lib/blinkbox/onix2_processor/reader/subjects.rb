@@ -37,7 +37,7 @@ module Blinkbox::Onix2Processor
 
         if @identifier['subjectschemeidentifier'] == "20"
           # Hack for publishers who send long strings as delimited by semicolons, commas etc, as keywords rather than as different items  
-          keywords = (@identifier['subjectheadingtext'] || '').split(/[;,\|]\s*/)
+          keywords = (@identifier['subjectheadingtext'] || '').split(/[;,|]\s*/)
           keywords.each do |keyword|
             new_subject = subject.dup
             new_subject['code'] = keyword

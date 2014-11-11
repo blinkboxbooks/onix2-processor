@@ -2,8 +2,8 @@ require "blinkbox/integerize"
 module Blinkbox::Onix2Processor
   class Title < Processor
     handles_xpath '/onixmessage/product/title'
-    # handles_xpath '/onixmessage/product/titleprefix'
-    # handles_xpath '/onixmessage/product/titlewithoutprefix'
+    handles_xpath '/onixmessage/product/titleprefix'
+    handles_xpath '/onixmessage/product/titlewithoutprefix'
     handles_xpath '/onixmessage/product/distinctivetitle'
     handles_xpath '/onixmessage/product/titletext'
 
@@ -18,14 +18,16 @@ module Blinkbox::Onix2Processor
     end
 
     def down(node, state)
-      state['book']['title'] = # next line
-        @identifier[%w{title distinctivetitle}] || @identifier[%w{distinctivetitle}] ||
-        @identifier[%w{title titletext}] || @identifier[%w{titletext}] || 
-        [
-          @identifier[%w{title titleprefix}] || @identifier[%w{titleprefix}],
-          @identifier[%w{title titlewithoutprefix}] || @identifier[%w{titlewithoutprefix}]
-        ].compact.join(' ')
-
+      prefix = @identifier[%w{title titleprefix}] || @identifier[%w{titleprefix}]
+      suffix = @identifier[%w{title titlewithoutprefix}] || @identifier[%w{titlewithoutprefix}]
+      sources = [
+        @identifier[%w{title distinctivetitle}],
+        @identifier[%w{distinctivetitle}],
+        @identifier[%w{title titletext}],
+        @identifier[%w{titletext}],
+        [ prefix, suffix ].compact.join(' ')
+      ]
+      state['book']['title'] = sources.compact.first
       extract_series_name_from_title(state)
     end
 
@@ -33,11 +35,11 @@ module Blinkbox::Onix2Processor
 
     # Hack: Checking for a series and book within the title
     def extract_series_name_from_title(state)
-      if state['book']['title'] =~ /^(.+?)\s*\(([^\)]+?),? (?:- )?book ([^\ ]+)\)$/i
+      if state['book']['title'] =~ /^(.+?)\s*\(([^)]+?),? (?:- )?book ([^ ]+)\)$/i
         state['book']['title'] = $1
         (state['book']['series'] ||= {})['title'] ||= $2
         (state['book']['series'] ||= {})['number'] ||= $3.integerize
-      elsif state['book']['title'] =~ /^(.+?):\s?([^\)]+?) book ([^\ ]+)$/i
+      elsif state['book']['title'] =~ /^(.+?):\s?([^)]+?) book ([^ ]+)$/i
         state['book']['title'] = $1
         (state['book']['series'] ||= {})['title'] ||= $2
         (state['book']['series'] ||= {})['number'] ||= $3.integerize

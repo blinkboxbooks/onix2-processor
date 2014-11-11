@@ -25,7 +25,7 @@ module Blinkbox::Onix2Processor
     private
 
     def enforce_isbn_rules!(state)
-      if state['book']['isbn'].nil? || !state['book']['isbn'].match(/^97(?:80|81|9\d)\d{9}$/)
+      if !(state['book']['isbn'] =~ /^97(?:80|81|9\d)\d{9}$/)
         product_failure(state, "InvalidISBN", isbn: state['book']['isbn'])
         state['book'].delete('isbn')
       end

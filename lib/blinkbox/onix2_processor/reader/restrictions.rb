@@ -32,25 +32,25 @@ module Blinkbox::Onix2Processor
 
     def down(node, state)
       case @identifier['salesrestrictiontype'] 
-      when'04', '01'
-        unless (state[:sales_outlets] & ACCEPTABLE_ONIX_RETAILER_IDS).length > 0
-          state['book']['availability']['salesRestrictions'] = {
-            "available" => false,
-            "code" => @identifier['salesrestrictiontype'],
-            "extra" => state[:sales_outlets].join(",")
-          }
-        end
+      when '04', '01'
+        add_sales_restriction(state) if (state[:sales_outlets] & ACCEPTABLE_ONIX_RETAILER_IDS).empty?
       when '09'
         # Do ingest these
       else
-        state['book']['availability']['salesRestrictions'] = {
-          "available" => false,
-          "code" => @identifier['salesrestrictiontype'],
-          "extra" => state[:sales_outlets].join(",")
-        }
+        add_sales_restriction(state)
       end
 
       state.delete(:sales_outlets)
+    end
+
+    private
+
+    def add_sales_restriction(state)
+      state['book']['availability']['salesRestrictions'] = {
+        "available" => false,
+        "code" => @identifier['salesrestrictiontype'],
+        "extra" => state[:sales_outlets].join(",")
+      }
     end
 
     ACCEPTABLE_ONIX_RETAILER_IDS = [
