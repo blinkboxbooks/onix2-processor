@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.join(__dir__, "../lib")
+require "blinkbox/common_config"
+require "blinkbox/onix2_processor"
+
+options = Blinkbox::CommonConfig.new
+
+begin
+  processor = Blinkbox::Onix2Processor::Service.new(options)
+  processor.start
+  processor.join
+rescue SystemExit, Interrupt, SignalException
+  processor.stop
+rescue Exception => e
+  processor.stop rescue nil
+  if processor && processor.logger
+    processor.logger.fatal e
+  else
+    raise e
+  end
+end

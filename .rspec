@@ -1,0 +1,5 @@
+--no-color
+--require spec_helper
+--format progress -o log/spec.log
+--format html     -o log/spec.html
+-cfd

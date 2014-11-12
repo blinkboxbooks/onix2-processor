@@ -1,0 +1,4 @@
+default: -p terminal
+terminal: --no-multiline -i -s --format progress
+ci: --no-color --format progress -o log/features.log --format junit -o log/ --format html -o log/features.html --format pretty
+full: --no-multiline --tags ~@wip -i -s --format pretty

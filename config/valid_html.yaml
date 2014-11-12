@@ -1,0 +1,12 @@
+:elements: [ol, ul, li, p, b, i, em, strong, br, a]
+:attributes:
+  a:
+    - href
+    - title
+:protocols:
+  a:
+    href:
+      - http
+      - https
+:remove_contents: [script]
+:output: :xhtml

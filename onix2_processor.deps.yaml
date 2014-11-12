@@ -1,0 +1,17 @@
+version: 0.1
+services:
+  # none
+messaging:
+  - receives:
+      exchange: Marvin
+      headers:
+        content-type: application/vnd.blinkbox.books.ingestion.file.pending.v2+json
+        referenced-content-type: application/onix2+xml
+    publishes:
+      exchange: Marvin
+      headers:
+        content-type: application/vnd.blinkbox.books.ingestion.book.metadata.v2+json
+  - receives:
+      exchange: Mapping
+      headers:
+        content-type: application/vnd.blinkbox.books.mapping.update.v1+json
