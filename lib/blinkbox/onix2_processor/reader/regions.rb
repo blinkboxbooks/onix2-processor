@@ -67,6 +67,7 @@ module Blinkbox::Onix2Processor
       state['book'][type][region] = previous && include_region
       has_excluded_regions = !state['book'][type].select { |_, r| !r }.empty?
       state['book'][type]['ROW'] = state['book'][type].delete('WORLD') if state['book'][type]['WORLD'] && has_excluded_regions
+      state['book'][type]['WORLD'] = state['book'][type].delete('ROW') if state['book'][type]['ROW'] && state['book'][type].size == 1
     end
   end
 end

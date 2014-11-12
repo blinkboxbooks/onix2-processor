@@ -33,6 +33,21 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['supplyRights']['WORLD']).to eq(true)
     end
 
+    it "must infer WORLD rights if only ROW is specified" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <SupplyDetail>
+            <SupplyToTerritory>ROW</SupplyToTerritory>
+          </SupplyDetail>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book['supplyRights'].size).to eq(1)
+      expect(book['supplyRights']['WORLD']).to eq(true)
+    end
+
     it "must untangle conflicting supply regions" do
       book = process_xml_with_service <<-XML
       <ONIXmessage>
