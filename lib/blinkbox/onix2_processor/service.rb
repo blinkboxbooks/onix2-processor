@@ -58,7 +58,8 @@ module Blinkbox
 
         @mapper = CommonMapping.new(
           options[:'mapper.url'],
-          service_name: SERVICE_NAME
+          service_name: SERVICE_NAME,
+          schema_root: "schemas"
         )
         @logger.info(
           short_message: "ONIX2 Processor v#{VERSION} initialized",

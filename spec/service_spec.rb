@@ -8,12 +8,16 @@ context Blinkbox::Onix2Processor::Service do
     end
 
     it "must create pending assets queue if they are not present" do
-      queue = stub_const("Blinkbox::CommonMessaging::Queue", double(Blinkbox::CommonMessaging::Queue))
-      allow(queue).to receive(:new)
+      queue_klass = stub_const("Blinkbox::CommonMessaging::Queue", double(Blinkbox::CommonMessaging::Queue))
+      allow(queue_klass).to receive(:new)
       exchange = stub_const("Blinkbox::CommonMessaging::Exchange", double(Blinkbox::CommonMessaging::Exchange))
       allow(exchange).to receive(:new)
+      mapping_klass = stub_const("Blinkbox::CommonMapping", double(Blinkbox::CommonMapping))
+      allow(mapping_klass).to receive(:new)
+
       described_class.new(@options)
-      expect(queue).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
+      expect(queue_klass).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
+      expect(mapping_klass).to have_received(:new)
     end
 
     it "must not start if logging options are missing" do
@@ -30,9 +34,7 @@ context Blinkbox::Onix2Processor::Service do
       @service = described_class.allocate
       allow(@service).to receive(:process_message)
       @queue = instance_double(Blinkbox::CommonMessaging::Queue)
-      def @queue.subscribe(opts = {}, &block)
-        @subscribe_block = block
-      end
+      allow(@queue).to receive(:subscribe) { |opts, &block| @subscribe_block = block }
       @service.instance_variable_set(:'@queue', @queue)
 
       @logger = instance_double(Blinkbox::CommonLogging)
