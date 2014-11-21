@@ -8,7 +8,8 @@ module Blinkbox::Onix2Processor
 
     def process(node, state)
       container = normalize_tags(node.position).last
-      @identifier[container] = node.value if %w{#text #cdata-section}.include?(node.name)
+      value = node.value.strip if %w{#text #cdata-section}.include?(node.name)
+      @identifier[container] = value if !value.nil? && !value.empty?
     end
 
     def down(node, state)

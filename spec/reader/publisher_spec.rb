@@ -78,5 +78,21 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book["publisher"]).to eq("Publisher")
       expect(book["imprint"]).to eq("Imprint")
     end
+
+    it "must extract publishers & imprints from within CDATA subtags" do
+      book = process_xml_with_service <<-XML
+      <ONIXmessage>
+        <Product>
+          <publisher>
+            <b081>
+            <![CDATA[ Houghton Mifflin Harcourt ]]>
+            </b081>
+          </publisher>
+        </Product>
+      </ONIXmessage>
+      XML
+      expect_schema_compliance(book)
+      expect(book["publisher"]).to eq("Houghton Mifflin Harcourt")
+    end
   end
 end
