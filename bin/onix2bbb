@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.join(__dir__, "../lib")
+require "blinkbox/onix2_processor/reader"
+require "optparse"
+require "json"
+require "yaml"
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: onix2json [options] onix-file"
+  opts.version = Blinkbox::Onix2Processor::VERSION
+
+  def opts.quit(message)
+    abort banner + "\n! " + message
+  end
+
+  opts.on("-i", "--isbn ISBN", "Only output the details for the given ISBN") do |isbn|
+  	opts.quit "#{isbn} is not a valid ISBN" unless isbn =~ /^97(?:81|80|9\d)\d{9}$/
+    options[:isbn] = isbn
+  end
+
+  opts.on("-f", "--format FORMAT", %w{yaml json}, "The output format") do |format|
+    options[:format] = format.to_sym
+  end
+end
+parser.parse!
+
+parser.quit "You must specify an onix file to process" if ARGV[0].nil?
+onix_filename = File.expand_path(ARGV[0])
+parser.quit "#{onix_filename} does not exist" unless File.exist?(onix_filename)
+
+json_filename = ARGV[1]
+parser.quit "#{json_filename} isn't a valid filename" if !json_filename.nil? && json_filename =~ /[^\w\s_-]/
+parser.quit "#{json_filename} already exists" if !json_filename.nil? && File.exist?(json_filename)
+options[:format] ||= :yaml if json_filename.nil?
+options[:output_io] = json_filename.nil? ? STDOUT : open(json_filename, "w")
+
+begin
+  source = { 'filename' => onix_filename }
+  reader = Blinkbox::Onix2Processor::Reader.new(open(onix_filename), source)
+  output = { 'books' => [] }
+  output['failures'] = reader.each_book do |book|
+    output['books'].push(book) if options[:isbn].nil? || book['isbn'] == options[:isbn]
+  end
+  output.delete('failures') if output['failures'].empty?
+  options[:output_io].puts case options[:format]
+  when :json
+    JSON.pretty_generate(output['books'])
+  when :yaml, nil
+    YAML.dump(output['books'])
+  end
+rescue
+  $stderr.puts "Something went wrong. JP!"
+  raise
+ensure
+  options[:output_io].close
+end

@@ -7,8 +7,6 @@ require "blinkbox/onix2_processor/reader"
 
 module Blinkbox
   module Onix2Processor
-    SERVICE_NAME = "Marvin/onix2_processor"
-    
     class Service
       attr_reader :logger
       include Blinkbox::CommonHelpers::TicToc
