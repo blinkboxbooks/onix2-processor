@@ -43,6 +43,7 @@ begin
     output['books'].push(book) if options[:isbn].nil? || book['isbn'] == options[:isbn]
   end
   output.delete('failures') if output['failures'].empty?
+  output = output['books'] if output.size == 1
   options[:output_io].puts case options[:format]
   when :json
     JSON.pretty_generate(output['books'])
