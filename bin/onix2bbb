@@ -40,7 +40,7 @@ begin
   reader = Blinkbox::Onix2Processor::Reader.new(open(onix_filename), source)
   output = { 'books' => [] }
   output['failures'] = reader.each_book do |book|
-    output['books'].push(book) if options[:isbn].nil? || book['isbn'] == options[:isbn]
+    output['books'].push(book.sort.to_h) if options[:isbn].nil? || book['isbn'] == options[:isbn]
   end
   output.delete('failures') if output['failures'].empty?
   output = output['books'] if output.size == 1
