@@ -15,9 +15,9 @@ GEM
     blinkbox-common_helpers (0.1.0)
     blinkbox-common_logging (0.5.0)
       gelf
-    blinkbox-common_mapping (0.1.1)
-      blinkbox-common_messaging (~> 0.5)
-    blinkbox-common_messaging (0.5.0)
+    blinkbox-common_mapping (0.1.2)
+      blinkbox-common_messaging (~> 0.5, >= 0.5.1)
+    blinkbox-common_messaging (0.5.1)
       activesupport
       bunny (~> 1.4)
       json-schema
@@ -50,7 +50,7 @@ GEM
     multi_test (0.1.1)
     nokogiri (1.6.4.1)
       mini_portile (~> 0.6.0)
-    rake (10.3.2)
+    rake (10.4.0)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
       rspec-expectations (~> 3.1.0)
