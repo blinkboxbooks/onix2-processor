@@ -46,9 +46,9 @@ begin
   output = output['books'] if output.size == 1
   options[:output_io].puts case options[:format]
   when :json
-    JSON.pretty_generate(output['books'])
+    JSON.pretty_generate(output)
   when :yaml, nil
-    YAML.dump(output['books'])
+    YAML.dump(output)
   end
 rescue
   $stderr.puts "Something went wrong. JP!"
