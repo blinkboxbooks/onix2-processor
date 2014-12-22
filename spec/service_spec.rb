@@ -9,9 +9,16 @@ context Blinkbox::Onix2Processor::Service do
 
     it "must create pending assets queue if they are not present" do
       queue = stub_const("Blinkbox::CommonMessaging::Queue", double(Blinkbox::CommonMessaging::Queue))
-      allow(queue).to receive(:new)
+      queue_instance = instance_double("Blinkbox::CommonMessaging::Queue")
+      allow(queue_instance).to receive(:purge!)
+      allow(queue_instance).to receive(:subscribe)
+      allow(queue).to receive(:new).and_return(queue_instance)
       exchange = stub_const("Blinkbox::CommonMessaging::Exchange", double(Blinkbox::CommonMessaging::Exchange))
       allow(exchange).to receive(:new)
+
+      mapping = stub_const("Blinkbox::CommonMapping", double(Blinkbox::CommonMapping))
+      allow(mapping).to receive(:new)
+
       described_class.new(@options)
       expect(queue).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
     end
