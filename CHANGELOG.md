@@ -1,5 +1,13 @@
 # Change log
 
+## 0.1.2 ([#3](https://git.mobcastdev.com/Marvin/onix2-processor/pull/3) 2014-12-22 16:38:37)
+
+Logging to graylog; upgrade gems
+
+### Improvements
+
+- Upgrade version of gems so Bunny logs to Graylog
+
 ## 0.1.1 ([#2](https://git.mobcastdev.com/Marvin/onix2-processor/pull/2) 2014-11-21 16:45:24)
 
 Crappy CDATA tags
