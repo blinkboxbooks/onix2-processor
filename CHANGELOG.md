@@ -1,5 +1,15 @@
 # Change log
 
+## 0.2.0 ([#4](https://git.mobcastdev.com/Marvin/onix2-processor/pull/4) 2015-01-07 16:11:10)
+
+Mapping & Prizes
+
+### New feature
+
+- Uses the real mapping gem
+- Has a command line tool for viewing the processed result of an ONIX file (super handy for investigations)
+- Can now extract prizes from ONIX
+
 ## 0.1.2 ([#3](https://git.mobcastdev.com/Marvin/onix2-processor/pull/3) 2014-12-22 16:38:37)
 
 Logging to graylog; upgrade gems
