@@ -7,8 +7,6 @@ require "blinkbox/onix2_processor/reader"
 
 module Blinkbox
   module Onix2Processor
-    SERVICE_NAME = "Marvin/onix2_processor"
-    
     class Service
       attr_reader :logger
       include Blinkbox::CommonHelpers::TicToc
@@ -58,7 +56,8 @@ module Blinkbox
 
         @mapper = CommonMapping.new(
           options[:'mapper.url'],
-          service_name: SERVICE_NAME
+          service_name: SERVICE_NAME,
+          schema_root: "schemas"
         )
         @logger.info(
           short_message: "ONIX2 Processor v#{VERSION} initialized",

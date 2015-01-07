@@ -1,3 +1,4 @@
+require "blinkbox/onix2_processor/version"
 require "nokogiri"
 require "htmlentities"
 require "zlib"
