@@ -1,5 +1,13 @@
 # Change log
 
+## 0.2.1 ([#5](https://git.mobcastdev.com/Marvin/onix2-processor/pull/5) 2015-01-07 17:47:38)
+
+Common Mapping return value
+
+### Bugfix 
+
+- Messages aren't being correctly acknowledged because of a bug in the common mapping library. This is now fixed.
+
 ## 0.2.0 ([#4](https://git.mobcastdev.com/Marvin/onix2-processor/pull/4) 2015-01-07 16:11:10)
 
 Mapping & Prizes
