@@ -143,6 +143,8 @@ module Blinkbox
               duration: toc(:file)
             )
             :ack
+          rescue
+            :reject
           end
         end
       end
