@@ -79,7 +79,7 @@ DEPENDENCIES
   blinkbox-common_config (~> 0.4)
   blinkbox-common_helpers (~> 0.1)
   blinkbox-common_logging (~> 0.5)
-  blinkbox-common_mapping (~> 0.0)
+  blinkbox-common_mapping (~> 0.1, >= 0.1.1)
   blinkbox-common_messaging (~> 0.5, >= 0.5.2)
   cucumber
   htmlentities

@@ -24,6 +24,7 @@ module Blinkbox::Onix2Processor
         case @identifier['prizecode']
         when /^0[1-7]$/
           prize["level"] = @identifier['prizecode']
+        when nil, "" then nil
         else
           product_failure(state, "InvalidPrizeLevel", level: @identifier['prizecode'])
         end
@@ -31,6 +32,7 @@ module Blinkbox::Onix2Processor
         case @identifier['prizecountry']
         when /^[A-Z]{2}$/
           prize["country"] = @identifier['prizecountry']
+        when nil, "" then nil
         else
           product_failure(state, "InvalidPrizeCountry", country: @identifier['prizecountry'])
         end

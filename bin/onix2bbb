@@ -42,6 +42,7 @@ begin
   output['failures'] = reader.each_book do |book|
     output['books'].push(book.sort.to_h) if options[:isbn].nil? || book['isbn'] == options[:isbn]
   end
+  output['failures'].delete_if { |f| f.delete(:isbn) != options[:isbn] } if !options[:isbn].nil?
   output.delete('failures') if output['failures'].empty?
   output = output['books'] if output.size == 1
   options[:output_io].puts case options[:format]

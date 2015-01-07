@@ -15,6 +15,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['prizes'].size).to eq(1)
       prize = book['prizes'].first
       expect(prize['name']).to eq("Booker Prize")
+      expect_no_failures(/Prize/)
     end
 
     it "must extract prize year" do
@@ -32,6 +33,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['prizes'].size).to eq(1)
       prize = book['prizes'].first
       expect(prize['year']).to eq(1999)
+      expect_no_failures(/Prize/)
     end
 
     it "must extract prize country" do
@@ -50,6 +52,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['prizes'].size).to eq(1)
       prize = book['prizes'].first
       expect(prize['country']).to eq("US")
+      expect_no_failures(/Prize/)
     end
 
     it "must not extract prize country if it is invalid" do
@@ -90,6 +93,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book['prizes'].size).to eq(1)
       prize = book['prizes'].first
       expect(prize['level']).to eq("02")
+      expect_no_failures(/Prize/)
     end
 
     it "must not extract prize level outside ONIX codelist 41" do
