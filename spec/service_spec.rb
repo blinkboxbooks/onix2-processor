@@ -20,8 +20,8 @@ context Blinkbox::Onix2Processor::Service do
       allow(mapping).to receive(:new)
 
       described_class.new(@options)
-      expect(queue_klass).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
-      expect(mapping_klass).to have_received(:new)
+      expect(queue).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
+      expect(mapping).to have_received(:new)
     end
 
     it "must not start if logging options are missing" do
