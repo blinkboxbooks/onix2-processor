@@ -143,7 +143,14 @@ module Blinkbox
               duration: toc(:file)
             )
             :ack
-          rescue
+          rescue => e
+            @logger.error(
+              short_message: "Uncaught error while processing ONIX file. Message sent to DLQ.",
+              event: :onix_uncaught_exception,
+              data: {
+                message_id_chain: metadata[:headers]['message_id_chain']
+              }
+            )
             :reject
           end
         end
