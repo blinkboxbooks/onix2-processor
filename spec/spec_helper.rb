@@ -36,6 +36,11 @@ module Helpers
       f[:error_code].match(matcher)
     end
   end
+
+  def expect_no_failures(matcher = nil)
+    relevant_failures = failures(matcher)
+    expect(relevant_failures.size).to eq(0), "The following failures were reported: #{relevant_failures.map { |f| f[:error_code] }}"
+  end
 end
 
 class ReaderExamples

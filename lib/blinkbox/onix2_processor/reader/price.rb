@@ -72,6 +72,8 @@ module Blinkbox::Onix2Processor
           code_grouping = DISCOUNT_CODES[@identifier['discountcodetypename'].downcase] if @identifier['discountcodetypename']
           code_grouping ||= DISCOUNT_CODES[:fallback]
           price['discountRate'] = code_grouping[@identifier['discountcode'].downcase] if @identifier['discountcode']
+        when '01', '03', '04', '05', '06'
+          # Ignoring other discount code references, for now (as per Robert's instructions)
         else
           return product_failure(state, "InvalidDiscountCodeType", type: @identifier['discountcodetype'])
         end

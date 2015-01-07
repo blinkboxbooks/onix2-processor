@@ -13,8 +13,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['type']).to eq("18")
       expect(desc['content']).to eq("My description")
     end
@@ -32,8 +32,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['type']).to eq("18")
       expect(desc['content']).to eq("<em>emphatically</em>")
     end
@@ -51,8 +51,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['type']).to eq("18")
       expect(desc['content']).to eq("A description")
     end
@@ -70,8 +70,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['content']).to eq("This is <strong>html</strong> dammit!")
     end
 
@@ -88,8 +88,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['content']).to eq("This is <strong>html</strong> dammit!")
     end
 
@@ -106,8 +106,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['content']).to eq("This really isn't SGML")
     end
 
@@ -123,8 +123,8 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect(book['descriptions'].size).to eq(1)
-      desc = book['descriptions'].first
+      expect(book['descriptions']['items'].size).to eq(1)
+      desc = book['descriptions']['items'].first
       expect(desc['content']).to eq("<p>Howdy</p>")
     end
 
@@ -154,7 +154,7 @@ context Blinkbox::Onix2Processor::Reader do
         </ONIXmessage>
         XML
         expect_schema_compliance(book)
-        desc = book["descriptions"].first
+        desc = book["descriptions"]['items'].first
         expect(desc["content"]).to eq(data)
       end
     end

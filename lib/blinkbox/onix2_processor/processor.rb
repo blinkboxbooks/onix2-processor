@@ -5,7 +5,7 @@ class Blinkbox::Onix2Processor::Processor
   @@valid_html = yaml_config("valid_html")
 
   # Instantiate a blackhole logger by default
-  @@logger = Class.new { def method_missing(*args); end }
+  @@logger = Class.new { def method_missing(*args); end }.new
 
   def self.logger=(logger)
     @@logger = logger

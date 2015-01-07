@@ -4,7 +4,6 @@ module Blinkbox::Onix2Processor
 
     def up(node, state)
       @identifier = {}
-      state['descriptions'] ||= []
     end
 
     def process(node, state)
@@ -36,7 +35,11 @@ module Blinkbox::Onix2Processor
         text['content'].clever_decode!
         text['content'] = sanitize_html(text['content'])
         return product_failure(state, "EmptyDescription") if text['content'].empty?
-        (state['book'][type] ||= []).push(text)
+        if type == "descriptions"
+          state['book'][type]['items'].push(text)
+        else
+          state['book'][type].push(text)
+        end
       end
     end
 

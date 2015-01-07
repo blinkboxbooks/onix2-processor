@@ -14,7 +14,7 @@ context Blinkbox::Onix2Processor::Reader do
       </ONIXmessage>
       XML
       expect_schema_compliance(book)
-      expect((book['descriptions'] || []).size).to eq(0)
+      expect((book['descriptions']['items'] || []).size).to eq(0)
       expect(book['reviews'].size).to eq(1)
       rev = book['reviews'].first
       expect(rev['type']).to eq("07")
