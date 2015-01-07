@@ -224,7 +224,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography")
-      expect(book["descriptions"].size).to eq(0)
+      expect(book["descriptions"]["items"].size).to eq(0)
     end
 
     it "must not replace contributor biography details with othertext biography details" do
@@ -247,7 +247,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect_schema_compliance(book)
       expect(book["contributors"].size).to eq(1)
       expect(book["contributors"].first["biography"]).to eq("A biography from contributor")
-      expect(book["descriptions"].size).to eq(1)
+      expect(book["descriptions"]["items"].size).to eq(1)
     end
 
     it "must not push biographies from othertext details to the contributor level for books with more than one contributor" do
@@ -274,7 +274,7 @@ context Blinkbox::Onix2Processor::Reader do
       expect(book["contributors"].size).to eq(2)
       expect(book["contributors"].first["biography"]).to be_nil
       expect(book["contributors"].last["biography"]).to be_nil
-      expect(book["descriptions"].size).to eq(1)
+      expect(book["descriptions"]["items"].size).to eq(1)
     end
 
     it "must sanitize HTML in biographies" do

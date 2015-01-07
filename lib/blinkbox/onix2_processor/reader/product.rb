@@ -4,7 +4,11 @@ module Blinkbox::Onix2Processor
 
     def up(node, state)
       state['book'] = {
-        'contributors' => []
+        'contributors' => [],
+        'descriptions' => {
+          'items' => []
+        },
+        'reviews' => []
       }
       state[:product_failures] = []
     end
@@ -64,12 +68,12 @@ module Blinkbox::Onix2Processor
       if state['book']['contributors'].size == 1
         contributor = state['book']['contributors'].first
 
-        biog = (state['book']['descriptions'] || []).select { |d|
+        biog = (state['book']['descriptions']['items'] || []).select { |d|
           d['type'] == "13"
         }.first
         if !biog.nil? && contributor['biography'].nil?
           contributor['biography'] = biog['content']
-          state['book']['descriptions'].delete(biog)
+          state['book']['descriptions']['items'].delete(biog)
         end
 
         images = state['book']['media']['images'] || [] rescue []
