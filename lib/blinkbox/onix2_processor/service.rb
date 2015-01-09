@@ -103,7 +103,7 @@ module Blinkbox
 
               message_id = @exchange.publish(
                 book_obj,
-                message_id_chain: metadata[:headers]['message_id_chain']
+                message_id_chain: metadata[:headers]['message_id_chain'] || []
               )
 
               @logger.info(
