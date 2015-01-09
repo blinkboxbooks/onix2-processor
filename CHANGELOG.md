@@ -1,5 +1,13 @@
 # Change log
 
+## 0.2.2 ([#6](https://git.mobcastdev.com/Marvin/onix2-processor/pull/6) 2015-01-09 15:30:36)
+
+Ensure message_id_chain is optional
+
+### Bugfix
+
+- Test messages don't have message_ids (because they're not sent from another service), this no longer breaks the service. 
+
 ## 0.2.1 ([#5](https://git.mobcastdev.com/Marvin/onix2-processor/pull/5) 2015-01-07 17:47:38)
 
 Common Mapping return value
