@@ -32,3 +32,10 @@ rescue LoadError
     $stderr.puts "Please install cucumber: `gem install cucumber`"
   end
 end
+
+namespace :build do
+  desc "Builds a docker container"
+  task :docker do
+    exec "docker build -t marvin/onix2-processor:#{File.read("VERSION").strip} ."
+  end
+end
