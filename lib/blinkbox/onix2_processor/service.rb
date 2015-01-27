@@ -54,11 +54,13 @@ module Blinkbox
           facility_version: VERSION
         )
 
+        CommonMapping.logger = @logger
         @mapper = CommonMapping.new(
           options[:'mapper.url'],
           service_name: SERVICE_NAME,
           schema_root: "schemas"
         )
+
         @logger.info(
           short_message: "ONIX2 Processor v#{VERSION} initialized",
           event: :service_started,
@@ -103,7 +105,7 @@ module Blinkbox
 
               message_id = @exchange.publish(
                 book_obj,
-                message_id_chain: metadata[:headers]['message_id_chain']
+                message_id_chain: metadata[:headers]['message_id_chain'] || []
               )
 
               @logger.info(

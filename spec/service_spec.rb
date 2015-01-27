@@ -18,6 +18,7 @@ context Blinkbox::Onix2Processor::Service do
 
       mapping = stub_const("Blinkbox::CommonMapping", double(Blinkbox::CommonMapping))
       allow(mapping).to receive(:new)
+      allow(mapping).to receive(:logger=)
 
       described_class.new(@options)
       expect(queue).to have_received(:new).with("Marvin.onix2_processor.pending_assets", exchange: "Marvin", bindings: anything, prefetch: kind_of(Integer))
