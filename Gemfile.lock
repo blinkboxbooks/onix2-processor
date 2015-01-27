@@ -1,6 +1,5 @@
 GEM
-  remote: http://artifactory.blinkbox.local/artifactory/api/gems/bbb-gems/
-  remote: http://artifactory.blinkbox.local/artifactory/api/gems/rubygems/
+  remote: https://rubygems.org/
   specs:
     activesupport (4.2.0)
       i18n (~> 0.7)
@@ -47,7 +46,7 @@ GEM
     minitest (5.5.1)
     multi_json (1.10.1)
     multi_test (0.1.1)
-    nokogiri (1.6.5)
+    nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     rake (10.4.2)
     rspec (3.1.0)

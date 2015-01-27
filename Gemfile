@@ -1,5 +1,4 @@
-source "http://artifactory.blinkbox.local/artifactory/api/gems/bbb-gems/"
-source "http://artifactory.blinkbox.local/artifactory/api/gems/rubygems/"
+source "https://rubygems.org"
 
 gem "blinkbox-common_config", "~> 0.4"
 gem "blinkbox-common_logging", "~> 0.5"
