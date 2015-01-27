@@ -1,5 +1,13 @@
 # Change log
 
+## 0.3.0 ([#8](https://git.mobcastdev.com/Marvin/onix2-processor/pull/8) 2015-01-27 18:08:52)
+
+Docker
+
+### New feature
+
+- Add docker components
+
 ## 0.2.3 ([#7](https://git.mobcastdev.com/Marvin/onix2-processor/pull/7) 2015-01-14 16:34:05)
 
 Update gems
