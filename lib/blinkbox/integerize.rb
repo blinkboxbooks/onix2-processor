@@ -1,6 +1,3 @@
-require 'linguistics'
-Linguistics.use(:en)
-
 class String
   # Will turn a string into a number, even if it's a word-number
   #
@@ -9,25 +6,10 @@ class String
   #     integerize("forty two") # => 42
   #     integerize("monkey") # => nil
   #
+  # TODO: Due to issues with the integerize gem and character encodings I've removed this code,
+  # check the git history and use the code there to fix this...
   def integerize
-    return nil if self.empty?
     return self.to_i if self.to_i.to_s == self
-
-    parts = self.downcase.split(/[ -]/)
-
-    case parts.length
-    when 1
-      n = (Linguistics::EN::Numbers::UNITS + Linguistics::EN::Numbers::TEENS).index(parts[0])
-      return n unless n.nil?
-
-      return Linguistics::EN::Numbers::TENS.index(parts[0]) * 10 rescue nil
-    when 2
-      n = Linguistics::EN::Numbers::TENS.index(parts[0]) * 10 rescue nil
-      return nil if n.nil?
-
-      return n + Linguistics::EN::Numbers::UNITS.index(parts[1])
-    end
-
-    nil
+    return nil
   end
 end

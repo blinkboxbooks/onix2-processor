@@ -1,5 +1,9 @@
 require 'rake'
 
+organisation = "com.blinkbox.books.marvin"
+name = "onix2-processor"
+version = File.read("VERSION").strip
+
 task :default => :test
 
 desc "Runs all tests"
@@ -30,5 +34,12 @@ begin
 rescue LoadError
   task :features do
     $stderr.puts "Please install cucumber: `gem install cucumber`"
+  end
+end
+
+namespace :build do
+  desc "Builds a docker container"
+  task :docker do
+    exec "docker build -t #{organisation.split(".").last}/#{name}:#{version} ."
   end
 end

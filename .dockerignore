@@ -1,0 +1,6 @@
+.git
+vendor/
+.bundle/
+rpm
+gpg
+spec
