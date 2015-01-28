@@ -1,2 +1,0 @@
-%define app_name        onix2_processor
-%define app_ver         %(cat VERSION)
