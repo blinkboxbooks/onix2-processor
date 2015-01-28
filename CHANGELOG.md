@@ -1,5 +1,9 @@
 # Change log
 
+## Open Source release (2015-01-28 14:11:21)
+
+Today we have decided to publish parts of our codebase on Github under the [MIT licence](LICENCE). The licence is very permissive, but we will always appreciate hearing if and where our work is used!
+
 ## 0.3.0 ([#8](https://git.mobcastdev.com/Marvin/onix2-processor/pull/8) 2015-01-27 18:08:52)
 
 Docker
