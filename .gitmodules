@@ -1,9 +1,3 @@
 [submodule "schemas"]
 	path = schemas
-	url = git@git.mobcastdev.com:Hermes/schemas.git
-[submodule "rpm"]
-	path = rpm
-	url = git@git.mobcastdev.com:ITOPS/specs.ruby-apps-multi.git
-[submodule "gpg"]
-	path = gpg
-	url = git@git.mobcastdev.com:ITOPS/gpg.books.teamcity.dev.git
+	url = git@github.com:blinkboxbooks/schemas.git
